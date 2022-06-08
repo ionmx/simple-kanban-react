@@ -6,6 +6,7 @@ import { getAllBoards, createBoard } from './services/KanbanService';
 
 function App() {
   const [boards, setBoards] = useState<null | BoardProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
   const showAddBoardForm = () => {
@@ -31,17 +32,18 @@ function App() {
   useEffect(() => {
     getAllBoards().then(response => {
       setBoards(response.data);
+      setLoading(false);
     });
   }, []);
 
-  if (!boards) {
+  if (loading) {
     return <></>
   }
 
   return (
     <div className="container mx-auto">
       <div className="grid p-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {boards.map((board) => {
+        {boards?.map((board) => {
           return (
             <div key={board.id} className="my-1 max-w-sm h-48 rounded border bg-white overflow-hidden shadow-lg hover:cursor-pointer" onClick={() => navigate(`/board/${board.id}`)} >
               <div className="px-6 py-4">
