@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BoardProps } from './interfaces';
+import BoardCard from './components/BoardCard';
 import { getAllBoards, createBoard } from './services/KanbanService';
 
 
@@ -15,12 +16,12 @@ function App() {
     f?.classList.add("show-form");
     i?.focus();
   }
-  
+
   const hideAddBoardForm = () => {
     const f = document.getElementById("flip-add-form");
     f?.classList.remove("show-form");
   }
-  
+
   const createNewBoard = () => {
     const title = document.getElementById('new-board-title') as HTMLInputElement | null;
     const description = document.getElementById('new-board-description') as HTMLTextAreaElement | null;
@@ -46,12 +47,7 @@ function App() {
       <div className="grid p-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {boards?.map((board) => {
           return (
-            <div key={board.id} className="my-1 max-w-sm h-48 rounded border bg-white overflow-hidden shadow-lg hover:cursor-pointer" onClick={() => navigate(`/board/${board.id}`)} >
-              <div className="px-6 py-4">
-                <div className="font-bold text-xl mb-2">{board.title}</div>
-                <p className="text-gray-700 text-base">{board.description}</p>
-              </div>
-            </div>
+            <BoardCard key={board.id} {...board}></BoardCard>
           );
         })
         }
