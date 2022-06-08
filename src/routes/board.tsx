@@ -13,7 +13,7 @@ const Board = () => {
     getBoard(id).then(response => {
       setBoard(response.data);
     });
-  }, []);
+  }, [id]);
 
   if (!board) {
     return <></>
@@ -30,7 +30,7 @@ const Board = () => {
         {board.columns.map((column) => {
           columnCount += 1;
           return (
-            <div className="my-4 max-w-sm min-h-48 rounded border bg-slate-200 shadow-lg p-3">
+            <div key={column.id} className="my-4 max-w-sm min-h-48 rounded border bg-slate-200 shadow-lg p-3">
               <h3 className="font-bold text-l">{column.title}</h3>
               {column.tasks.map((task) => {
                 return (
@@ -39,7 +39,7 @@ const Board = () => {
                   </div>
                 )
               })}
-              { columnCount == 1? <button className="w-full p-2 mt-4 bg-slate-100 rounded-lg text-sm text-slate-800 font-bold"><span className="text-green-400">+</span> Add Task</button> : <></> }
+              { columnCount === 1? <button className="w-full p-2 mt-4 bg-slate-100 rounded-lg text-sm text-slate-800 font-bold"><span className="text-green-400">+</span> Add Task</button> : <></> }
             </div>
           );
         })}
