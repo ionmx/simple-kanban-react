@@ -41,7 +41,8 @@ function App() {
   }
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-4">
+      <h1 className="font-bold text-3xl mb-2">Boards</h1>
       <div className="grid p-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {boards?.map((board) => {
           return (
