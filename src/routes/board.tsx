@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { createTask, getBoard } from '../services/KanbanService';
 import { BoardCompleteProps } from '../interfaces'
@@ -32,7 +32,7 @@ const Board = () => {
       createTask(board_id, column_id, desc.value, position).then(response => {
         // FIXME: I think it's best to push new task item to board/column but don't know how...
         // board?.columns[0].tasks.push(response.data);
-        getBoard(id).then(response => {
+        getBoard(board_id).then(response => {
           setBoard(response.data);
         });
         desc.value = '';
@@ -41,13 +41,21 @@ const Board = () => {
 
     // Cancel on Escape key pressed
     if (key === 'Escape' || key === 27) {
-      desc.value = '';
-      desc.classList.add("hidden");
-      const newTaskButton = document.getElementById("button-" + column_id);
-      newTaskButton?.classList.remove("hidden");
+      hideTaskForm(desc);
     }
+  }
 
+  const onBlurNewTask = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    const desc: HTMLTextAreaElement = event.currentTarget;
+    hideTaskForm(desc);
+  }
 
+  const hideTaskForm = (desc:HTMLTextAreaElement) => {
+    const column_id = desc.dataset.column;
+    desc.value = '';
+    desc.classList.add("hidden");
+    const newTaskButton = document.getElementById("button-" + column_id);
+    newTaskButton?.classList.remove("hidden");
   }
 
   useEffect(() => {
@@ -83,7 +91,7 @@ const Board = () => {
                   </div>
                 )
               })}
-              <textarea id={`new-task-${column.id}`} data-position={position + 1} data-column={column.id} data-board={board.id} className="my-2 w-full h-12 p-1 text-xs resize-none hidden" placeholder="What needs to be done?" onKeyDown={submitNewTask}></textarea>
+              <textarea id={`new-task-${column.id}`} data-position={position + 1} data-column={column.id} data-board={board.id} className="my-2 w-full h-12 p-1 text-xs resize-none hidden" placeholder="What needs to be done?" onKeyDown={submitNewTask} onBlur={onBlurNewTask}></textarea>
               <button id={`button-${column.id}`} className="w-full p-2 my-2 bg-slate-100 rounded-lg text-sm text-slate-800 font-bold" onClick={showNewTask} data-column={column.id}><span className="text-green-400">+</span> Add Task</button>
             </div>
           );
