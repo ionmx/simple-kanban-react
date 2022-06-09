@@ -1,50 +1,34 @@
-import { createContext, useContext, useEffect, useState, ElementType } from "react";
+import { createContext, useContext, useEffect, useState, Dispatch, SetStateAction } from "react";
 import { BoardCompleteProps } from '../interfaces'
 import { getBoard } from '../services/KanbanService';
 import { useParams } from 'react-router-dom';
-
-
 
 interface BoardProviderProps {
   children?: JSX.Element | JSX.Element[];
 };
 
-export const BoardContext = createContext<BoardCompleteProps | null>(null);
+interface BoardContextProps {
+  board: BoardCompleteProps | null;
+  setBoard: Dispatch<SetStateAction<BoardCompleteProps | null>>;
+}
 
-export function useBoard(): BoardCompleteProps | null {
+export const BoardContext = createContext<BoardContextProps | null>(null);
+
+export function useBoard(): BoardContextProps | null {
   const context = useContext(BoardContext);
   return context;
 }
 
 export function BoardProvider({ children }: BoardProviderProps): JSX.Element {
-  
   const [board, setBoard] = useState<BoardCompleteProps | null>(null);
   const [boardLoading, setBoardLoading] = useState<boolean>(true);
-
   const { id } = useParams();
 
-  
-
   useEffect(() => {
-
     getBoard(id).then(response => {
-      console.log('==============')
-      console.log(response.data);
       setBoard(response.data);
       setBoardLoading(false);
-      console.log('---------');
-      console.log(board);
     });
-
-      // getBoard(id).then(response => {
-      //   console.log('SI ENTRO');
-      //   console.log(id);
-      //   setBoardLoading(false);
-      //   setBoard(response.data);
-      //   console.log(board);
-      //   console.log(boardLoading);
-      // });
-
   }, [id]);
 
   if (boardLoading) {
@@ -52,7 +36,7 @@ export function BoardProvider({ children }: BoardProviderProps): JSX.Element {
   }
 
   return (
-    <BoardContext.Provider value={board}>
+    <BoardContext.Provider value={{board, setBoard}}>
       {children}
     </BoardContext.Provider>
   );

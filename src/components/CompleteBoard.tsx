@@ -2,10 +2,11 @@ import { useBoard } from "../context/BoardContext";
 import DefaultContainer from "../components/DefaultContainer"
 import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
+import { idText } from "typescript";
 
 
 const CompleteBoard = () => {
-  const board = useBoard();
+  const board = useBoard()?.board;
   const navigate = useNavigate();
   let columnsLength = 0;
   if (board) {

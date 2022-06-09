@@ -1,9 +1,13 @@
 import { ColumnProps } from "../interfaces";
 import Task from "./Task";
 import { createTask, getBoard } from '../services/KanbanService';
+import { useBoard } from "../context/BoardContext";
 
 
 const Column = (column: ColumnProps) => {
+  const board = useBoard()?.board;
+  const setBoard = useBoard()?.setBoard;
+
 
   const showNewTask = (event: React.MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget;
@@ -21,6 +25,7 @@ const Column = (column: ColumnProps) => {
     const column_id = desc.dataset.column;
     const position = desc.dataset.position;
     const key = event.key || event.keyCode;
+    
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
@@ -28,8 +33,11 @@ const Column = (column: ColumnProps) => {
       createTask(board_id, column_id, desc.value, position).then(response => {
         // FIXME: I think it's best to push new task item to board/column but don't know how...
         // board?.columns[0].tasks.push(response.data);
+        
         getBoard(board_id).then(response => {
-          //setBoard(response.data);
+          if (setBoard) {
+            setBoard(response.data);
+          }
         });
         desc.value = '';
       })
@@ -71,7 +79,7 @@ const Column = (column: ColumnProps) => {
         className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
         data-position={position + 1}
         data-column={column.id}
-        data-board={column.board_id}
+        data-board={board?.id}
         onKeyDown={submitNewTask}
         onBlur={onBlurNewTask}
         placeholder="What needs to be done?"
