@@ -4,7 +4,7 @@ import { BoardProps } from './interfaces';
 import BoardCard from './components/BoardCard';
 import AddBoardForm from './components/AddBoardForm';
 import { getAllBoards } from './services/KanbanService';
-
+import DefaultContainer from "./components/DefaultContainer";
 
 function App() {
   const [boards, setBoards] = useState<null | BoardProps[]>([]);
@@ -23,8 +23,7 @@ function App() {
   }
 
   return (
-    <div className="container mx-auto mt-4">
-      <h1 className="font-bold text-3xl mb-2">Boards</h1>
+    <DefaultContainer title="Boards" description="">
       <div className="grid p-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {boards?.map((board) => {
           return (
@@ -34,7 +33,7 @@ function App() {
         }
         <AddBoardForm></AddBoardForm>
       </div>
-    </div>
+    </DefaultContainer>
   );
 }
 

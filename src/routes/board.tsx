@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getBoard } from '../services/KanbanService';
 import { BoardCompleteProps } from '../interfaces'
 import Column from "../components/Column";
+import DefaultContainer from "../components/DefaultContainer";
 
 
 const Board = () => {
@@ -25,9 +26,7 @@ const Board = () => {
   let position = 0;
 
   return (
-    <div className="container mx-auto mt-4">
-      <h1 className="font-bold text-3xl mb-2">{board.title}</h1>
-      <p className="text-sm text-gray-400">{board.description}</p>
+    <DefaultContainer title={board.title} description={board.description}>
       <div className={`grid gap-4  grid-cols-${columnsLength + 1}`}>
         {board.columns.map((column) => {
           position = 0;
@@ -40,8 +39,7 @@ const Board = () => {
       <div className="text-center my-8">
         <button className="text-xs text-blue-800 underline" onClick={() => navigate('/')}>Return to boards list</button>
       </div>
-
-    </div>
+    </DefaultContainer>
   );
 }
 
