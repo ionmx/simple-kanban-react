@@ -64,8 +64,8 @@ const Column = (column: ColumnProps) => {
 
   let position = 0;
   return (
-    <div key={column.id} className="my-4 max-w-sm min-h-48 rounded border bg-slate-200 shadow-lg p-2">
-      <h3 className="font-bold text-l">{column.title}</h3>
+    <div key={column.id} className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100">
+      <h3 className="font-medium uppercase text-xs py-2 pl-1">{column.title}</h3>
       <ul>
         {column.tasks.map((task) => {
           position += 1;
@@ -85,7 +85,7 @@ const Column = (column: ColumnProps) => {
         placeholder="What needs to be done?"
       />
       <button id={`button-${column.id}`}
-        className="w-full p-2 my-2 bg-slate-100 rounded-lg text-sm text-slate-800 font-bold"
+        className="w-full p-2 mb-2 hover:bg-slate-200 rounded-lg text-sm text-slate-800 font-medium text-left"
         data-column={column.id}
         onClick={showNewTask} >
         <span className="text-green-400">+</span> Add Task
