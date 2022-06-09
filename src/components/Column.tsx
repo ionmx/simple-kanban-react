@@ -1,7 +1,9 @@
 import { ColumnProps } from "../interfaces";
 import Task from "./Task";
+import { TaskProps } from "../interfaces";
 import { createTask, getBoard } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
+import { Droppable } from "react-beautiful-dnd";
 
 
 const Column = (column: ColumnProps) => {
@@ -25,7 +27,7 @@ const Column = (column: ColumnProps) => {
     const column_id = desc.dataset.column;
     const position = desc.dataset.position;
     const key = event.key || event.keyCode;
-    
+
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
@@ -33,7 +35,7 @@ const Column = (column: ColumnProps) => {
       createTask(board_id, column_id, desc.value, position).then(response => {
         // FIXME: I think it's best to push new task item to board/column but don't know how...
         // board?.columns[0].tasks.push(response.data);
-        
+
         getBoard(board_id).then(response => {
           if (setBoard) {
             setBoard(response.data);
@@ -63,17 +65,22 @@ const Column = (column: ColumnProps) => {
   }
 
   let position = 0;
+
   return (
     <div key={column.id} className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100">
       <h3 className="font-medium uppercase text-xs py-2 pl-1">{column.title}</h3>
-      <ul>
-        {column.tasks.map((task) => {
-          position += 1;
-          return (
-            <Task key={task.id} {...task} />
-          )
-        })}
-      </ul>
+
+      <Droppable droppableId={`${column.id}`}>
+        {(provided) => (
+          <div {...provided.droppableProps} 
+            ref={provided.innerRef}>
+            {column.tasks.map((task, index) => (
+              <Task key={task.id} {...task} index={index}/>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
 
       <textarea id={`new-task-${column.id}`}
         className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
