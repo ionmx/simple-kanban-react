@@ -68,7 +68,7 @@ const Column = (column: ColumnProps) => {
       </ul>
 
       <textarea id={`new-task-${column.id}`}
-        className="rounded w-full h-12 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
+        className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
         data-position={position + 1}
         data-column={column.id}
         data-board={column.board_id}
