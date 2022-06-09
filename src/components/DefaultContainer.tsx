@@ -1,6 +1,6 @@
 interface DefaultContainerProps {
-  title: string;
-  description: string;
+  title: string | undefined;
+  description: string | undefined;
   children?: JSX.Element | JSX.Element[];
 };
 
