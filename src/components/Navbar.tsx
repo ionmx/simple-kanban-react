@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { ActivityIndicator } from './ActivityIndicator';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ const Navbar = () => {
         <button onClick={() => navigate('/')} className="flex items-center">
           <span className="self-center text-xl font-semibold whitespace-nowrap text-black">Simple Kanban</span>
         </button>
+        <ActivityIndicator/>
       </div>
     </nav>
   );
