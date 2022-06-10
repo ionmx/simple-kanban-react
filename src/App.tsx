@@ -5,6 +5,7 @@ import BoardCard from './components/BoardCard';
 import AddBoardForm from './components/AddBoardForm';
 import { getAllBoards } from './services/KanbanService';
 import DefaultContainer from "./components/DefaultContainer";
+import { activityIndicatorOff, activityIndicatorOn } from './components/ActivityIndicator';
 
 function App() {
   const [boards, setBoards] = useState<null | BoardProps[]>([]);
@@ -12,9 +13,11 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    activityIndicatorOn();
     getAllBoards().then(response => {
       setBoards(response.data);
       setLoading(false);
+      activityIndicatorOff();
     });
   }, []);
 

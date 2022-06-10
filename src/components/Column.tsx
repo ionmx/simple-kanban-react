@@ -3,6 +3,7 @@ import Task from "./Task";
 import { createTask, getBoard } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
 import { Droppable } from "react-beautiful-dnd";
+import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 
 
 const Column = (column: ColumnProps) => {
@@ -31,7 +32,9 @@ const Column = (column: ColumnProps) => {
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
       event.preventDefault();
+      activityIndicatorOn();
       createTask(boardId, columnId, desc.value, position).then(response => {
+        activityIndicatorOff();
         const boardCopy = { ...board } as BoardCompleteProps;
         const newTask = response.data as TaskProps;
         boardCopy.columns[0].tasks.push(newTask);

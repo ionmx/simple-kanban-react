@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, Dispatch, SetStateActio
 import { BoardCompleteProps } from '../interfaces'
 import { getBoard } from '../services/KanbanService';
 import { useParams } from 'react-router-dom';
+import { activityIndicatorOff, activityIndicatorOn } from "../components/ActivityIndicator";
 
 interface BoardProviderProps {
   children?: JSX.Element | JSX.Element[];
@@ -23,11 +24,13 @@ export function BoardProvider({ children }: BoardProviderProps): JSX.Element {
   const [board, setBoard] = useState<BoardCompleteProps | null>(null);
   const [boardLoading, setBoardLoading] = useState<boolean>(true);
   const { id } = useParams();
-
+  
   useEffect(() => {
+    activityIndicatorOn();
     getBoard(id).then(response => {
       setBoard(response.data);
       setBoardLoading(false);
+      activityIndicatorOff();
     });
   }, [id]);
 
