@@ -70,7 +70,7 @@ const Column = (column: ColumnProps) => {
     <div key={column.id} className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100">
       <h3 className="font-medium uppercase text-xs py-2 pl-1">{column.title}</h3>
 
-      <Droppable droppableId={`${column.id}`}>
+      <Droppable droppableId={`${column.index}`}>
         {(provided) => (
           <div {...provided.droppableProps} 
             ref={provided.innerRef}>

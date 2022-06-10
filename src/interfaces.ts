@@ -9,6 +9,7 @@ export interface ColumnProps {
   title: string;
   position: number;
   board_id: number;
+  index: number;
   tasks: TaskProps[];
 }
 
