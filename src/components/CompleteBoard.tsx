@@ -4,6 +4,7 @@ import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
+import { moveTask } from "../services/KanbanService";
 
 
 const CompleteBoard = () => {
@@ -19,13 +20,13 @@ const CompleteBoard = () => {
   let columnCount = 0;
   let position = 0;
 
-  const removeFromColumn = (column: ColumnProps, index: number) => {    
+  const removeFromColumn = (column: ColumnProps, index: number) => {
     const result = Array.from(column.tasks);
     const [removed] = result.splice(index, 1);
     return [removed, result];
   };
-  
-  const addToColumn = (column: ColumnProps, index:number, element:TaskProps) => {
+
+  const addToColumn = (column: ColumnProps, index: number, element: TaskProps) => {
     const result = Array.from(column.tasks);
     result.splice(index, 0, element);
     return result;
@@ -37,7 +38,7 @@ const CompleteBoard = () => {
       return;
     }
 
-    const taskId = result.draggableId;
+    const taskId = parseInt(result.draggableId);
 
     const sourceColumnIndex = parseInt(result.source?.droppableId);
     const sourceIndex = result.source?.index;
@@ -47,30 +48,34 @@ const CompleteBoard = () => {
     const destinationIndex = result.destination?.index;
     const destinationColumnId = board?.columns[destinationColumnIndex].id;
 
-    const boardCopy = {...board} as BoardCompleteProps;
-
     console.log(`MOVE: ${taskId} FROM<${sourceColumnId}>: ${sourceColumnIndex}[${sourceIndex}] TO<${destinationColumnId}>: ${destinationColumnIndex}[${destinationIndex}]`);
-
-    // Remove task from source column 
-    const sourceColumn = boardCopy.columns[sourceColumnIndex];
-    const [removedElement, newsourceColumn] = removeFromColumn(
-      sourceColumn,
-      result.source.index
-    );
-    boardCopy.columns[sourceColumnIndex].tasks = newsourceColumn as TaskProps[];
-
-    // Add removed task to destination column
-    const destinationColumn = boardCopy.columns[destinationColumnIndex];
-    boardCopy.columns[destinationColumnIndex].tasks = addToColumn(
-      destinationColumn,
-      result.destination.index,
-      removedElement as TaskProps
-    );
     
-    if (setBoard) {
-      setBoard(boardCopy);
-    }
-    
+    moveTask(board?.id as number, sourceColumnId as number, taskId, destinationColumnId as number, destinationIndex).then(response => {
+
+      const boardCopy = { ...board } as BoardCompleteProps;
+
+      // Remove task from source column 
+      const sourceColumn = boardCopy.columns[sourceColumnIndex];
+      const [removedElement, newsourceColumn] = removeFromColumn(
+        sourceColumn,
+        sourceIndex
+      );
+      boardCopy.columns[sourceColumnIndex].tasks = newsourceColumn as TaskProps[];
+
+      // Add removed task to destination column
+      const destinationColumn = boardCopy.columns[destinationColumnIndex];
+      boardCopy.columns[destinationColumnIndex].tasks = addToColumn(
+        destinationColumn,
+        destinationIndex,
+        removedElement as TaskProps
+      );
+
+      if (setBoard) {
+        setBoard(boardCopy);
+      }
+
+    });
+
   };
 
   return (
