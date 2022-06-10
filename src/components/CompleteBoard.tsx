@@ -49,7 +49,7 @@ const CompleteBoard = () => {
     const destinationColumnId = board?.columns[destinationColumnIndex].id;
 
     console.log(`MOVE: ${taskId} FROM<${sourceColumnId}>: ${sourceColumnIndex}[${sourceIndex}] TO<${destinationColumnId}>: ${destinationColumnIndex}[${destinationIndex}]`);
-    
+
     moveTask(board?.id as number, sourceColumnId as number, taskId, destinationColumnId as number, destinationIndex).then(response => {
 
       const boardCopy = { ...board } as BoardCompleteProps;

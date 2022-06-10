@@ -53,14 +53,14 @@ export async function createTask(board: string | undefined, column: string | und
 
 export async function moveTask(board: number, column: number, task: number, destinationColumn: number, destinationPosition: number) {
   try { 
-    const url = `/api/v1/boards/${board}/columns/${column}/tasks/${task}/move`;
+    const url = `/api/v1/boards/${board}/move-task`;
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({destination: destinationColumn, position: destinationPosition})
+      body: JSON.stringify({task: task, destination: destinationColumn, position: destinationPosition})
     });
     return await response.json();
   } catch (error) {
