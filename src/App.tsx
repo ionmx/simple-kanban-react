@@ -27,7 +27,7 @@ function App() {
 
   return (
     <DefaultContainer title="Boards" description="">
-      <div className="grid p-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div className="grid p-2 sm:p-0 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {boards?.map((board) => {
           return (
             <BoardCard key={board.id} {...board}></BoardCard>
