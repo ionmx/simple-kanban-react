@@ -1,6 +1,5 @@
-import { ColumnProps } from "../interfaces";
+import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
 import Task from "./Task";
-import { TaskProps } from "../interfaces";
 import { createTask, getBoard } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
 import { Droppable } from "react-beautiful-dnd";
@@ -23,8 +22,8 @@ const Column = (column: ColumnProps) => {
 
   const submitNewTask = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const desc: HTMLTextAreaElement = event.currentTarget;
-    const board_id = desc.dataset.board;
-    const column_id = desc.dataset.column;
+    const boardId = desc.dataset.board;
+    const columnId = desc.dataset.column;
     const position = desc.dataset.position;
     const key = event.key || event.keyCode;
 
@@ -32,15 +31,13 @@ const Column = (column: ColumnProps) => {
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
       event.preventDefault();
-      createTask(board_id, column_id, desc.value, position).then(response => {
-        // FIXME: I think it's best to push new task item to board/column but don't know how...
-        // board?.columns[0].tasks.push(response.data);
-
-        getBoard(board_id).then(response => {
-          if (setBoard) {
-            setBoard(response.data);
-          }
-        });
+      createTask(boardId, columnId, desc.value, position).then(response => {
+        const boardCopy = { ...board } as BoardCompleteProps;
+        const newTask = response.data as TaskProps;
+        boardCopy.columns[0].tasks.push(newTask);
+        if (setBoard) {
+          setBoard(boardCopy);
+        }
         desc.value = '';
       })
     }
@@ -57,10 +54,10 @@ const Column = (column: ColumnProps) => {
   }
 
   const hideTaskForm = (desc: HTMLTextAreaElement) => {
-    const column_id = desc.dataset.column;
+    const columnId = desc.dataset.column;
     desc.value = '';
     desc.classList.add("hidden");
-    const newTaskButton = document.getElementById("button-" + column_id);
+    const newTaskButton = document.getElementById("button-" + columnId);
     newTaskButton?.classList.remove("hidden");
   }
 
