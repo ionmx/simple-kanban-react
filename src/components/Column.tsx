@@ -25,6 +25,7 @@ const Column = (column: ColumnProps) => {
     const desc: HTMLTextAreaElement = event.currentTarget;
     const boardId = desc.dataset.board;
     const columnId = desc.dataset.column;
+    const columnIndex = desc.dataset.index as unknown as number;
     const position = desc.dataset.position;
     const key = event.key || event.keyCode;
 
@@ -37,7 +38,7 @@ const Column = (column: ColumnProps) => {
         activityIndicatorOff();
         const boardCopy = { ...board } as BoardCompleteProps;
         const newTask = response.data as TaskProps;
-        boardCopy.columns[0].tasks.push(newTask);
+        boardCopy.columns[columnIndex].tasks.push(newTask);
         if (setBoard) {
           setBoard(boardCopy);
         }
@@ -85,6 +86,7 @@ const Column = (column: ColumnProps) => {
       <textarea id={`new-task-${column.id}`}
         className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
         data-position={position + 1}
+        data-index={column.index}
         data-column={column.id}
         data-board={board?.id}
         onKeyDown={submitNewTask}
