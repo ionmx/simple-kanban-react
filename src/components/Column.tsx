@@ -26,7 +26,6 @@ const Column = (column: ColumnProps) => {
     const boardId = desc.dataset.board;
     const columnId = desc.dataset.column;
     const columnIndex = desc.dataset.index as unknown as number;
-    const position = desc.dataset.position;
     const key = event.key || event.keyCode;
 
 
@@ -65,8 +64,6 @@ const Column = (column: ColumnProps) => {
     newTaskButton?.classList.remove("hidden");
   }
 
-  let position = 0;
-
   return (
     <Draggable draggableId={`${column.id}`} index={column.index}>
       {(provided, snapshot) => (
@@ -102,7 +99,6 @@ const Column = (column: ColumnProps) => {
 
           <textarea id={`new-task-${column.id}`}
             className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
-            data-position={position + 1}
             data-index={column.index}
             data-column={column.id}
             data-board={board?.id}
