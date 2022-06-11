@@ -69,10 +69,15 @@ const Column = (column: ColumnProps) => {
 
   return (
     <Draggable draggableId={`${column.id}`} index={column.index}>
-      {provided => (
+      {(provided, snapshot) => (
         <div 
           key={column.id} 
-          className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100"
+          className={`my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100
+                      ${snapshot.isDragging
+                        ? "drop-shadow-lg"
+                        : ""
+                      }`
+                    }
           {...provided.draggableProps} 
           ref={provided.innerRef}
         >
