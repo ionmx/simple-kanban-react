@@ -34,7 +34,7 @@ const Column = (column: ColumnProps) => {
     if (key === 'Enter' || key === 13) {
       event.preventDefault();
       activityIndicatorOn();
-      createTask(boardId, columnId, desc.value, position).then(response => {
+      createTask(boardId, columnId, desc.value).then(response => {
         activityIndicatorOff();
         const boardCopy = { ...board } as BoardCompleteProps;
         const newTask = response.data as TaskProps;

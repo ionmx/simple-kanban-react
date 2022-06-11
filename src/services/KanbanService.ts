@@ -33,7 +33,7 @@ export async function createBoard(title: string | undefined, description: string
   }
 }
 
-export async function createTask(board: string | undefined, column: string | undefined, description: string | undefined, position: string | undefined) {
+export async function createTask(board: string | undefined, column: string | undefined, description: string | undefined) {
   try {
     const url = `/api/v1/boards/${board}/columns/${column}/tasks`;
     const response = await fetch(url, {
@@ -42,7 +42,7 @@ export async function createTask(board: string | undefined, column: string | und
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({description: description, position: position})
+      body: JSON.stringify({description: description})
     });
     return await response.json();
   } catch (error) {
