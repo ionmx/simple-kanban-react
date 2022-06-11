@@ -18,14 +18,8 @@ const CompleteBoard = () => {
     columnsLength = Object.keys(board.columns).length;
   }
 
-  let columnCount = 0;
-  let position = 0;
-
-
-
   const onDragEnd = (result: DropResult) => {
 
-    console.log(result);
     const removeFromColumn = (column: ColumnProps, index: number) => {
       const result = Array.from(column.tasks);
       const [removed] = result.splice(index, 1);
@@ -58,15 +52,12 @@ const CompleteBoard = () => {
 
 
     // MOVE COLUMN
+    // -----------
     if (result.type === 'column') {
       const columnId = parseInt(result.draggableId);
       const cols = boardCopy.columns;
-
-      //const newColumnOrder = Array.from(this.state.columnOrder);
       const removedColumn = cols.splice(sourceIndex, 1);
-      console.log(removedColumn);
       cols.splice(destinationIndex, 0, removedColumn[0]);
-
 
       if (setBoard) {
         setBoard(boardCopy);
@@ -84,18 +75,18 @@ const CompleteBoard = () => {
     }
 
     // MOVE TASK
-
+    //----------
     const taskId = parseInt(result.draggableId);
     const sourceColumnId = board?.columns[sourceId].id;
     const destinationColumnId = board?.columns[destinationId].id;
 
     // Remove task from source column 
     const sourceColumn = boardCopy.columns[sourceId];
-    const [removedElement, newsourceColumn] = removeFromColumn(
+    const [removedElement, newSourceColumn] = removeFromColumn(
       sourceColumn,
       sourceIndex
     );
-    boardCopy.columns[sourceId].tasks = newsourceColumn as TaskProps[];
+    boardCopy.columns[sourceId].tasks = newSourceColumn as TaskProps[];
 
     // Add removed task to destination column
     const destinationColumn = boardCopy.columns[destinationId];
@@ -136,8 +127,6 @@ const CompleteBoard = () => {
               ref={provided.innerRef}
             >
               {board?.columns.map((column, index) => {
-                position = 0;
-                columnCount += 1;
                 return (
                   <Column key={column.id} {...column} index={index}></Column>
                 );
