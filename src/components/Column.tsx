@@ -2,7 +2,7 @@ import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
 import Task from "./Task";
 import { createTask, getBoard } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 
 
@@ -68,39 +68,53 @@ const Column = (column: ColumnProps) => {
   let position = 0;
 
   return (
-    <div key={column.id} className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100">
-      <h3 className="font-medium uppercase text-xs py-2 pl-1">{column.title}</h3>
+    <Draggable draggableId={`${column.id}`} index={column.index}>
+      {provided => (
+        <div 
+          key={column.id} 
+          className="my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100"
+          {...provided.draggableProps} 
+          ref={provided.innerRef}
+        >
+          <h3 
+            className="font-medium uppercase text-xs py-2 pl-1"
+            {...provided.dragHandleProps}
+          >
+            {column.title}
+          </h3>
 
-      <Droppable droppableId={`${column.index}`}>
-        {(provided) => (
-          <div {...provided.droppableProps} 
-            ref={provided.innerRef}>
-            {column.tasks.map((task, index) => (
-              <Task key={task.id} {...task} index={index}/>
-            ))}
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
+          <Droppable droppableId={`${column.index}`} type="task">
+            {(provided) => (
+              <div {...provided.droppableProps}
+                ref={provided.innerRef}>
+                {column.tasks.map((task, index) => (
+                  <Task key={task.id} {...task} index={index} />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
-      <textarea id={`new-task-${column.id}`}
-        className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
-        data-position={position + 1}
-        data-index={column.index}
-        data-column={column.id}
-        data-board={board?.id}
-        onKeyDown={submitNewTask}
-        onBlur={onBlurNewTask}
-        placeholder="What needs to be done?"
-      />
-      <button id={`button-${column.id}`}
-        className="w-full p-2 mb-2 hover:bg-slate-200 rounded-lg text-sm text-slate-800 font-medium text-left"
-        data-column={column.id}
-        onClick={showNewTask} >
-        <span className="text-green-400">+</span> Add Task
-      </button>
+          <textarea id={`new-task-${column.id}`}
+            className="rounded w-full h-14 p-2 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
+            data-position={position + 1}
+            data-index={column.index}
+            data-column={column.id}
+            data-board={board?.id}
+            onKeyDown={submitNewTask}
+            onBlur={onBlurNewTask}
+            placeholder="What needs to be done?"
+          />
+          <button id={`button-${column.id}`}
+            className="w-full p-2 mb-2 hover:bg-slate-200 rounded-lg text-sm text-slate-800 font-medium text-left"
+            data-column={column.id}
+            onClick={showNewTask} >
+            <span className="text-green-400">+</span> Add Task
+          </button>
 
-    </div>
+        </div>
+      )}
+    </Draggable>
   )
 }
 

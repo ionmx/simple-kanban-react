@@ -51,7 +51,7 @@ export async function createTask(board: string | undefined, column: string | und
   }
 }
 
-export async function moveTask(board: number, column: number, task: number, destinationColumn: number, destinationPosition: number) {
+export async function moveTask(board: number, task: number, destinationColumn: number, destinationPosition: number) {
   try { 
     const url = `/api/v1/boards/${board}/move-task`;
     const response = await fetch(url, {
@@ -61,6 +61,24 @@ export async function moveTask(board: number, column: number, task: number, dest
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({task: task, destination: destinationColumn, position: destinationPosition})
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function moveColumn(board: number, column: number, destinationPosition: number) {
+  try { 
+    const url = `/api/v1/boards/${board}/move-column`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({column: column, position: destinationPosition})
     });
     return await response.json();
   } catch (error) {
