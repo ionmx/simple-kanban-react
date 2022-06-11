@@ -7,12 +7,16 @@ const Task = (task: TaskProps) => {
       {(provided, snapshot) => {
         return (
           <div
-            className="mb-2 rounded border bg-white p-2 pb-8 text-sm  drop-shadow-sm"
+            className={`mb-2 rounded border bg-white p-2 pb-8 drop-shadow-sm ${
+              snapshot.isDropAnimating
+                ? "border-gray-300 border-2"
+                : ""
+            }`}
             ref={provided.innerRef}
-            data-snapshot={snapshot}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             >
+              {snapshot.isDropAnimating}
               {task.description}
           </div>
         )}
