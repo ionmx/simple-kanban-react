@@ -55,12 +55,12 @@ const CompleteBoard = () => {
         const boardCopy = { ...board } as BoardCompleteProps;
         const newColumn = response.data as ColumnProps;
         newColumn.tasks = [];
-        console.log(newColumn);
         boardCopy.columns.push(newColumn);
         if (setBoard) {
           setBoard(boardCopy);
         }
         title.value = '';
+        hideColumnForm();
       })
     }
     
