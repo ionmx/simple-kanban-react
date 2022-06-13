@@ -4,7 +4,7 @@ import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
-import { moveColumn, moveTask } from "../services/KanbanService";
+import { createColumn, moveColumn, moveTask } from "../services/KanbanService";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 
 
@@ -16,6 +16,61 @@ const CompleteBoard = () => {
   let columnsLength = 0;
   if (board) {
     columnsLength = Object.keys(board.columns).length;
+  }
+
+  const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const button: HTMLButtonElement = event.currentTarget;
+    const b = button.dataset.board;
+    const placeholder = document.getElementById('newColumnPlaceholder');
+    const inputColumn = document.getElementById('newColumnInput');
+    placeholder?.classList.add('rounded-lg')
+    placeholder?.classList.add('bg-slate-100');
+    button.classList.add('hidden');
+    inputColumn?.classList.remove('hidden');
+    inputColumn?.focus();
+  }
+
+  const hideColumnForm = () => {
+    const button = document.getElementById('addColumnButton');
+    const placeholder = document.getElementById('newColumnPlaceholder');
+    const inputColumn = document.getElementById('newColumnInput') as HTMLInputElement;
+    placeholder?.classList.remove('rounded-lg')
+    placeholder?.classList.remove('bg-slate-100');
+    button?.classList.remove('hidden');
+    inputColumn?.classList.add('hidden');
+    inputColumn.value = '';
+  }
+
+  const submitNewColumn = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = event.key || event.keyCode;
+    const title: HTMLInputElement = event.currentTarget;
+    const boardId = title.dataset.board;
+
+    // Submit on Enter key pressed
+    if (key === 'Enter' || key === 13) {
+      event.preventDefault();
+      activityIndicatorOn();
+      createColumn(boardId, title.value).then(response => {
+        activityIndicatorOff();
+        const boardCopy = { ...board } as BoardCompleteProps;
+        const newColumn = response.data as ColumnProps;
+        newColumn.tasks = [];
+        console.log(newColumn);
+        boardCopy.columns.push(newColumn);
+        if (setBoard) {
+          setBoard(boardCopy);
+        }
+        title.value = '';
+      })
+    }
+    
+    // Cancel on Escape key pressed
+    if (key === 'Escape' || key === 27) {
+      hideColumnForm();
+    }
+  }
+  const onBlurNewColumn = () => {
+    hideColumnForm();
   }
 
   const onDragEnd = (result: DropResult) => {
@@ -132,6 +187,23 @@ const CompleteBoard = () => {
                 );
               })}
               {provided.placeholder}
+              <div id="newColumnPlaceholder" className="my-4 max-w-sm min-h-48 p-1">
+                <button
+                  id="addColumnButton"
+                  data-board={board?.id}
+                  onClick={showColumnForm}
+                  className="px-2 hover:bg-slate-200 rounded-lg text-sm text-slate-800 font-medium text-left"
+                >
+                  <span className="text-gray-400 text-3xl">+</span>
+                </button>
+                <input id="newColumnInput"
+                  className="rounded w-full p-1 text-sm resize-none hidden outline-none drop-shadow-sm border-blue-500 border-2"
+                  data-board={board?.id}
+                  onKeyDown={submitNewColumn}
+                  onBlur={onBlurNewColumn}
+                  placeholder="Column name"
+                />
+              </div>
             </div>
           )}
 

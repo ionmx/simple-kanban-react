@@ -33,6 +33,24 @@ export async function createBoard(title: string | undefined, description: string
   }
 }
 
+export async function createColumn(board: string | undefined, title: string | undefined) {
+  try {
+    const url = `/api/v1/boards/${board}/columns/`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({title: title})
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 export async function createTask(board: string | undefined, column: string | undefined, description: string | undefined) {
   try {
     const url = `/api/v1/boards/${board}/columns/${column}/tasks`;
