@@ -17,8 +17,10 @@ export interface TaskProps {
   id: number;
   description: string;
   position: number;
+  board_id: number;
   column_id: number;
   index: number;
+  column_index: number;
 }
 
 export interface BoardCompleteProps {

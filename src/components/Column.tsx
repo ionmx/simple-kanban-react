@@ -90,7 +90,7 @@ const Column = (column: ColumnProps) => {
               <div {...provided.droppableProps}
                 ref={provided.innerRef}>
                 {column.tasks.map((task, index) => (
-                  <Task key={task.id} {...task} index={index} />
+                  <Task key={task.id} {...task} index={index} board_id={column.board_id} column_id={column.id} column_index={column.index}/>
                 ))}
                 {provided.placeholder}
               </div>

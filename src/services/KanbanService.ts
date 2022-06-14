@@ -69,6 +69,22 @@ export async function createTask(board: string | undefined, column: string | und
   }
 }
 
+export async function updateTask(board: string | undefined, column: string | undefined, task: string | undefined, description: string | undefined) {
+  try {
+    const url = `/api/v1/boards/${board}/columns/${column}/tasks/${task}`;
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify({description: description}),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+
 export async function moveTask(board: number, task: number, destinationColumn: number, destinationPosition: number) {
   try { 
     const url = `/api/v1/boards/${board}/move-task`;
