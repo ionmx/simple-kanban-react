@@ -1,6 +1,7 @@
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
+import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
 import Task from "./Task";
-import { createTask, getBoard } from '../services/KanbanService';
+import { createTask, updateColumn } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
@@ -10,6 +11,59 @@ const Column = (column: ColumnProps) => {
   const board = useBoard()?.board;
   const setBoard = useBoard()?.setBoard;
 
+  const editColumn = (event: KeyboardEvent<HTMLInputElement>) => {
+    const title: HTMLInputElement = event.currentTarget;
+    const boardId = title.dataset.board;
+    const columnId = title.dataset.column;
+    const columnIndex = title.dataset.index as unknown as number;
+
+    const key = event.key || event.keyCode;
+
+
+    // Submit on Enter key pressed
+    if (key === 'Enter' || key === 13) {
+      event.preventDefault();
+      activityIndicatorOn();
+      updateColumn(boardId, columnId, title.value).then(response => {
+        activityIndicatorOff();
+        const boardCopy = { ...board } as BoardCompleteProps;
+        const newColumn = response.data as ColumnProps;
+        boardCopy.columns[columnIndex].title = newColumn.title;
+        if (setBoard) {
+          setBoard(boardCopy);
+          hideEditColumn(title);
+        }
+        title.value = '';
+      })
+    }
+
+    // Cancel on Escape key pressed
+    if (key === 'Escape' || key === 27) {
+      hideEditColumn(title);
+    }
+  };
+
+  const enableEditColumn = (event: MouseEvent<HTMLDivElement>) => {
+    const div: HTMLDivElement = event.currentTarget;
+    const column = div.dataset.column;
+    const input = document.getElementById(`column-input-${column}`);
+    div.classList.add('hidden');
+    input?.classList.remove('hidden');
+    input?.focus();
+  }
+
+  const hideEditColumn = (title: HTMLInputElement) => {
+    const column = title.dataset.column;
+    const text = document.getElementById(`column-text-${column}`);
+    title.value = `${title.dataset.original}`;
+    title.classList.add('hidden');
+    text?.classList.remove('hidden');
+  }
+
+  const onBlurEditColumn = (event: FocusEvent<HTMLInputElement>) => {
+    const title: HTMLInputElement = event.currentTarget;
+    hideEditColumn(title);
+  }
 
   const showNewTask = (event: React.MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget;
@@ -78,12 +132,25 @@ const Column = (column: ColumnProps) => {
           {...provided.draggableProps} 
           ref={provided.innerRef}
         >
-          <h3 
-            className="font-medium uppercase text-xs py-2 pl-1"
+          <div
+            id={`column-text-${column.id}`}
+            className="font-medium text-xs py-2 pl-1"
+            data-column={column.id}
+            onClick={enableEditColumn}
             {...provided.dragHandleProps}
           >
             {column.title}
-          </h3>
+          </div>
+          <input
+              id={`column-input-${column.id}`}
+              className="hidden rounded w-full p-2 text-sm resize-none outline-none drop-shadow-sm border-blue-500 border-2"
+              data-original={column.title}
+              data-board={column.board_id}
+              data-column={column.id}
+              data-index={column.index}
+              onKeyDown={editColumn}
+              onBlur={onBlurEditColumn}
+              defaultValue={column.title}/>
 
           <Droppable droppableId={`${column.index}`} type="task">
             {(provided) => (
