@@ -84,6 +84,20 @@ export async function updateTask(board: string | undefined, column: string | und
   }
 }
 
+export async function deleteTask(board: string | undefined, column: string | undefined, task: string | undefined) {
+  try {
+    const url = `/api/v1/boards/${board}/columns/${column}/tasks/${task}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 export async function updateColumn(board: string | undefined, column: string | undefined, title: string | undefined) {
   try {
     const url = `/api/v1/boards/${board}/columns/${column}`;
