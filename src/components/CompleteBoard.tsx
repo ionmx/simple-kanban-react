@@ -15,7 +15,7 @@ const CompleteBoard = () => {
 
   let columnsLength = 0;
   if (board) {
-    columnsLength = Object.keys(board.columns).length;
+    columnsLength = Object.keys(board.columns).length + 1;
   }
 
   const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -177,7 +177,7 @@ const CompleteBoard = () => {
         >
           {provided => (
             <div
-              className={`grid gap-4  grid-cols-${columnsLength + 1}`}
+              className={`grid gap-4  grid-cols-${columnsLength}`}
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
