@@ -1,5 +1,4 @@
 import { useBoard } from "../context/BoardContext";
-import DefaultContainer from "../components/DefaultContainer"
 import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
@@ -63,7 +62,7 @@ const CompleteBoard = () => {
         hideColumnForm();
       })
     }
-    
+
     // Cancel on Escape key pressed
     if (key === 'Escape' || key === 27) {
       hideColumnForm();
@@ -168,7 +167,10 @@ const CompleteBoard = () => {
   };
 
   return (
-    <DefaultContainer title={board?.title} description={board?.description}>
+    <div className="container mx-auto mt-4">
+      <h1 className="pl-2 sm:p-0 font-medium text-3xl mb-2">{board?.title}</h1>
+      <p className="text-m text-gray-400">{board?.description}</p>
+      
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="columns"
@@ -178,16 +180,16 @@ const CompleteBoard = () => {
           {provided => (
             <div
               className={`grid gap-4  
-                          ${columnsLength == 1? 'grid-cols-1' : '' }
-                          ${columnsLength == 2? 'grid-cols-2' : '' }
-                          ${columnsLength == 3? 'grid-cols-3' : '' }
-                          ${columnsLength == 4? 'grid-cols-4' : '' }
-                          ${columnsLength == 5? 'grid-cols-5' : '' }
-                          ${columnsLength == 6? 'grid-cols-6' : '' }
-                          ${columnsLength == 7? 'grid-cols-7' : '' }
-                          ${columnsLength == 8? 'grid-cols-8' : '' }
-                          ${columnsLength == 9? 'grid-cols-9' : '' }`
-                        }
+                          ${columnsLength == 1 ? 'grid-cols-1' : ''}
+                          ${columnsLength == 2 ? 'grid-cols-2' : ''}
+                          ${columnsLength == 3 ? 'grid-cols-3' : ''}
+                          ${columnsLength == 4 ? 'grid-cols-4' : ''}
+                          ${columnsLength == 5 ? 'grid-cols-5' : ''}
+                          ${columnsLength == 6 ? 'grid-cols-6' : ''}
+                          ${columnsLength == 7 ? 'grid-cols-7' : ''}
+                          ${columnsLength == 8 ? 'grid-cols-8' : ''}
+                          ${columnsLength == 9 ? 'grid-cols-9' : ''}`
+              }
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
@@ -222,7 +224,7 @@ const CompleteBoard = () => {
           <button className="text-xs text-blue-800 underline" onClick={() => navigate('/')}>Return to boards index.</button>
         </div>
       </DragDropContext>
-    </DefaultContainer>
+    </div>
   )
 }
 
