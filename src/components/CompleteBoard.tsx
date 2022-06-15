@@ -3,7 +3,7 @@ import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
-import { createColumn, moveColumn, moveTask } from "../services/KanbanService";
+import { createColumn, moveColumn, moveTask, updateBoardDescription, updateBoardTitle } from "../services/KanbanService";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 
 
@@ -71,6 +71,118 @@ const CompleteBoard = () => {
   const onBlurNewColumn = () => {
     hideColumnForm();
   }
+
+  const enableBoardTitleEdit = (event: React.MouseEvent<HTMLHeadElement>) => {
+    const h1 = event.currentTarget;
+    const title = document.getElementById('board-title-input');
+    h1.classList.add('hidden');
+    title?.classList.remove('hidden');
+    title?.focus();
+
+  }
+
+  const editBoardTitle = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const key = event.key || event.keyCode;
+    const title: HTMLInputElement = event.currentTarget;
+    const boardId = title.dataset.board;
+
+    // Submit on Enter key pressed
+    if (key === 'Enter' || key === 13) {
+      event.preventDefault();
+      activityIndicatorOn();
+      updateBoardTitle(boardId, title.value).then(response => {
+        activityIndicatorOff();
+        const boardCopy = { ...board } as BoardCompleteProps;
+        boardCopy.title = title.value;
+        if (setBoard) {
+          setBoard(boardCopy);
+        }
+        hideBoardTitleEdit();
+      })
+    }
+
+    // Cancel on Escape key pressed
+    if (key === 'Escape' || key === 27) {
+      hideBoardTitleEdit();
+    }
+  }
+
+  const onBlurBoardTitle = () => {
+    hideBoardTitleEdit();
+  }
+
+  const hideBoardTitleEdit = () => {
+    const h1 = document.getElementById('board-title');
+    const titleInput = document.getElementById('board-title-input') as HTMLInputElement;
+   
+    if (h1) {
+      h1.classList.remove('hidden');
+      h1.innerHTML = `${h1.dataset.original}`;
+    }
+
+    if (titleInput) {
+      titleInput.classList.add('hidden');
+      titleInput.value = `${h1?.dataset.original}`;
+    }
+    
+  }
+
+  const enableBoardDescriptionEdit = (event: React.MouseEvent<HTMLDivElement>) => {
+    const desc = event.currentTarget;
+    const descTextarea = document.getElementById('board-desc-textarea');
+    desc.classList.add('hidden');
+    descTextarea?.classList.remove('hidden');
+    descTextarea?.focus();
+
+  }
+
+  const editBoardDescription = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const key = event.key || event.keyCode;
+    const desc: HTMLTextAreaElement = event.currentTarget;
+    const boardId = desc.dataset.board;
+
+    // Submit on Enter key pressed
+    if (key === 'Enter' || key === 13) {
+      event.preventDefault();
+      activityIndicatorOn();
+      updateBoardDescription(boardId, desc.value).then(response => {
+        activityIndicatorOff();
+        const boardCopy = { ...board } as BoardCompleteProps;
+        boardCopy.description = desc.value;
+        if (setBoard) {
+          setBoard(boardCopy);
+        }
+        hideBoardDescriptionEdit();
+      })
+    }
+
+    // Cancel on Escape key pressed
+    if (key === 'Escape' || key === 27) {
+      hideBoardDescriptionEdit();
+    }
+  }
+
+  const onBlurBoardDescription = () => {
+    hideBoardDescriptionEdit();
+  }
+
+  const hideBoardDescriptionEdit = () => {
+    const desc = document.getElementById('board-desc');
+    const descTextarea = document.getElementById('board-desc-textarea') as HTMLTextAreaElement;
+   
+    if (desc) {
+      desc.classList.remove('hidden');
+      desc.innerHTML = `${desc.dataset.original}`;
+    }
+
+    if (descTextarea) {
+      descTextarea.classList.add('hidden');
+      descTextarea.value = `${desc?.dataset.original}`;
+    }
+    
+  }
+
+ 
 
   const onDragEnd = (result: DropResult) => {
 
@@ -168,9 +280,40 @@ const CompleteBoard = () => {
 
   return (
     <div className="container mx-auto mt-4">
-      <h1 className="pl-2 sm:p-0 font-medium text-3xl mb-2">{board?.title}</h1>
-      <p className="text-m text-gray-400">{board?.description}</p>
-      
+      <h1 
+        id="board-title"
+        className="hover:cursor-pointer border-2 border-white outline-none w-1/2 pl-2 sm:p-0 font-medium text-3xl mb-2"
+        data-original={board?.title}
+        data-board={board?.id}
+        onClick={enableBoardTitleEdit}
+      >{board?.title}</h1>
+      <input 
+        id="board-title-input" 
+        className="hidden focus:border-blue-500 border-2 border-white outline-none w-1/2 pl-2 sm:p-0 font-medium text-3xl mb-2" 
+        data-board={board?.id}
+        defaultValue={board?.title}
+        onKeyDown={editBoardTitle}
+        onBlur={onBlurBoardTitle}
+      />
+      <div 
+        id="board-desc"
+        data-original={board?.description}
+        data-board={board?.id}
+        onClick={enableBoardDescriptionEdit}
+        className="hover:cursor-pointer border-2 border-white resize-none outline-none w-1/2 text-m text-gray-400"
+      >
+        {board?.description}
+      </div>
+      <textarea 
+        id="board-desc-textarea" 
+        className="hidden focus:border-blue-500 border-2 border-white resize-none outline-none w-1/2 text-m text-gray-400" 
+        defaultValue={board?.description}
+        data-board={board?.id}
+        data-original={board?.description}
+        onKeyDown={editBoardDescription}
+        onBlur={onBlurBoardDescription}
+      />
+    
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="columns"
@@ -180,15 +323,15 @@ const CompleteBoard = () => {
           {provided => (
             <div
               className={`grid gap-4  
-                          ${columnsLength == 1 ? 'grid-cols-1' : ''}
-                          ${columnsLength == 2 ? 'grid-cols-2' : ''}
-                          ${columnsLength == 3 ? 'grid-cols-3' : ''}
-                          ${columnsLength == 4 ? 'grid-cols-4' : ''}
-                          ${columnsLength == 5 ? 'grid-cols-5' : ''}
-                          ${columnsLength == 6 ? 'grid-cols-6' : ''}
-                          ${columnsLength == 7 ? 'grid-cols-7' : ''}
-                          ${columnsLength == 8 ? 'grid-cols-8' : ''}
-                          ${columnsLength == 9 ? 'grid-cols-9' : ''}`
+                          ${columnsLength === 1 ? 'grid-cols-1' : ''}
+                          ${columnsLength === 2 ? 'grid-cols-2' : ''}
+                          ${columnsLength === 3 ? 'grid-cols-3' : ''}
+                          ${columnsLength === 4 ? 'grid-cols-4' : ''}
+                          ${columnsLength === 5 ? 'grid-cols-5' : ''}
+                          ${columnsLength === 6 ? 'grid-cols-6' : ''}
+                          ${columnsLength === 7 ? 'grid-cols-7' : ''}
+                          ${columnsLength === 8 ? 'grid-cols-8' : ''}
+                          ${columnsLength === 9 ? 'grid-cols-9' : ''}`
               }
               {...provided.droppableProps}
               ref={provided.innerRef}

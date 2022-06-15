@@ -33,6 +33,37 @@ export async function createBoard(title: string | undefined, description: string
   }
 }
 
+export async function updateBoardTitle(board: string | undefined, title: string | undefined) {
+  try {
+    const url = `/api/v1/boards/${board}`;
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify({title: title}),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function updateBoardDescription(board: string | undefined, description: string | undefined) {
+  try {
+    const url = `/api/v1/boards/${board}`;
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify({description: description}),
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+
 export async function createColumn(board: string | undefined, title: string | undefined) {
   try {
     const url = `/api/v1/boards/${board}/columns/`;
