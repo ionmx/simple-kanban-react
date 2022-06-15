@@ -1,10 +1,11 @@
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
 import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
 import Task from "./Task";
-import { createTask, updateColumn } from '../services/KanbanService';
+import { createTask, updateColumn, deleteColumn } from '../services/KanbanService';
 import { useBoard } from "../context/BoardContext";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
+import { XIcon } from "@heroicons/react/outline";
 
 
 const Column = (column: ColumnProps) => {
@@ -118,30 +119,63 @@ const Column = (column: ColumnProps) => {
     newTaskButton?.classList.remove("hidden");
   }
 
+  const removeColumn = (event: MouseEvent<HTMLDivElement>) => {
+    const div: HTMLDivElement = event.currentTarget;
+    const boardId = div.dataset.board;
+    const columnId = div.dataset.column;
+    const columnIndex = div.dataset.index as unknown as number;
+    const boardCopy = { ...board } as BoardCompleteProps;
+
+    if (boardCopy.columns[columnIndex].tasks.length > 0) {
+      alert('Column is not empty');
+      return;
+    }
+
+    if (window.confirm('Are you sure?')) {
+      deleteColumn(boardId, columnId).then(response => {
+        boardCopy.columns.splice(columnIndex, 1);
+        if (setBoard) {
+          setBoard(boardCopy);
+        }
+      });
+    }
+  }
+
   return (
     <Draggable draggableId={`${column.id}`} index={column.index}>
       {(provided, snapshot) => (
-        <div 
-          key={column.id} 
+        <div
+          key={column.id}
           className={`my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100
                       ${snapshot.isDragging
-                        ? "drop-shadow-lg"
-                        : ""
-                      }`
-                    }
-          {...provided.draggableProps} 
+              ? "drop-shadow-lg"
+              : ""
+            }`
+          }
+          {...provided.draggableProps}
           ref={provided.innerRef}
         >
-          <div
-            id={`column-text-${column.id}`}
-            className="font-medium text-xs py-2 pl-1"
-            data-column={column.id}
-            onClick={enableEditColumn}
-            {...provided.dragHandleProps}
-          >
-            {column.title}
-          </div>
-          <input
+          <div className="group">
+            <div
+              className="hidden group-hover:block hover:cursor-pointer h-4 w-4 m-1 text-gray-400 float-right"
+              data-board={column.board_id}
+              data-column={column.id}
+              data-index={column.index}
+              onClick={removeColumn}>
+              <XIcon
+                aria-hidden="true"
+              />
+            </div>
+            <div
+              id={`column-text-${column.id}`}
+              className="font-medium text-xs py-2 pl-1"
+              data-column={column.id}
+              onClick={enableEditColumn}
+              {...provided.dragHandleProps}
+            >
+              {column.title}
+            </div>
+            <input
               id={`column-input-${column.id}`}
               className="hidden rounded w-full p-2 text-sm resize-none outline-none drop-shadow-sm border-blue-500 border-2"
               data-original={column.title}
@@ -150,14 +184,15 @@ const Column = (column: ColumnProps) => {
               data-index={column.index}
               onKeyDown={editColumn}
               onBlur={onBlurEditColumn}
-              defaultValue={column.title}/>
+              defaultValue={column.title} />
+          </div>
 
           <Droppable droppableId={`${column.index}`} type="task">
             {(provided) => (
               <div {...provided.droppableProps}
                 ref={provided.innerRef}>
                 {column.tasks.map((task, index) => (
-                  <Task key={task.id} {...task} index={index} board_id={column.board_id} column_id={column.id} column_index={column.index}/>
+                  <Task key={task.id} {...task} index={index} board_id={column.board_id} column_id={column.id} column_index={column.index} />
                 ))}
                 {provided.placeholder}
               </div>
