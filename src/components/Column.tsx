@@ -175,17 +175,18 @@ const Column = (column: ColumnProps) => {
             >
               {column.title}
             </div>
-            <input
-              id={`column-input-${column.id}`}
-              className="hidden rounded w-full p-2 text-sm resize-none outline-none drop-shadow-sm border-blue-500 border-2"
-              data-original={column.title}
-              data-board={column.board_id}
-              data-column={column.id}
-              data-index={column.index}
-              onKeyDown={editColumn}
-              onBlur={onBlurEditColumn}
-              defaultValue={column.title} />
           </div>
+
+          <input
+            id={`column-input-${column.id}`}
+            className="hidden rounded w-full p-2 text-sm resize-none outline-none drop-shadow-sm border-blue-500 border-2"
+            data-original={column.title}
+            data-board={column.board_id}
+            data-column={column.id}
+            data-index={column.index}
+            onKeyDown={editColumn}
+            onBlur={onBlurEditColumn}
+            defaultValue={column.title} />
 
           <Droppable droppableId={`${column.index}`} type="task">
             {(provided) => (
