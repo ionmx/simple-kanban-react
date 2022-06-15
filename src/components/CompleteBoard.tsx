@@ -177,7 +177,17 @@ const CompleteBoard = () => {
         >
           {provided => (
             <div
-              className={`grid gap-4  grid-cols-${columnsLength}`}
+              className={`grid gap-4  
+                          ${columnsLength == 1? 'grid-cols-1' : '' }
+                          ${columnsLength == 2? 'grid-cols-2' : '' }
+                          ${columnsLength == 3? 'grid-cols-3' : '' }
+                          ${columnsLength == 4? 'grid-cols-4' : '' }
+                          ${columnsLength == 5? 'grid-cols-5' : '' }
+                          ${columnsLength == 6? 'grid-cols-6' : '' }
+                          ${columnsLength == 7? 'grid-cols-7' : '' }
+                          ${columnsLength == 8? 'grid-cols-8' : '' }
+                          ${columnsLength == 9? 'grid-cols-9' : '' }`
+                        }
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
