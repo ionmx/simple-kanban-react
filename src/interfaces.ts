@@ -2,7 +2,7 @@ export interface BoardProps {
   id: number;
   title: string;
   description: string;
-}
+};
 
 export interface ColumnProps {
   id: number;
@@ -11,7 +11,7 @@ export interface ColumnProps {
   board_id: number;
   index: number;
   tasks: TaskProps[];
-}
+};
 
 export interface TaskProps {
   id: number;
@@ -21,11 +21,11 @@ export interface TaskProps {
   column_id: number;
   index: number;
   column_index: number;
-}
+};
 
 export interface BoardCompleteProps {
   id: number;
   title: string;
   description: string;
   columns: ColumnProps[];
-}
+};
