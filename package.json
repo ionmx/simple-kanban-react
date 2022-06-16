@@ -20,7 +20,7 @@
     "typescript": "^4.7.3",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "https://my-simple-kanban.herokuapp.com/",
+  "proxy": "http://localhost:4000",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
