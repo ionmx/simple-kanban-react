@@ -19,7 +19,6 @@ const CompleteBoard = () => {
 
   const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget;
-    const b = button.dataset.board;
     const placeholder = document.getElementById('newColumnPlaceholder');
     const inputColumn = document.getElementById('newColumnInput');
     placeholder?.classList.add('rounded-lg')
@@ -243,7 +242,6 @@ const CompleteBoard = () => {
     // MOVE TASK
     //----------
     const taskId = parseInt(result.draggableId);
-    const sourceColumnId = board?.columns[sourceId].id;
     const destinationColumnId = board?.columns[destinationId].id;
 
     // Remove task from source column 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { BoardProps } from './interfaces';
 import BoardCard from './components/BoardCard';
 import AddBoardForm from './components/AddBoardForm';
@@ -9,7 +8,6 @@ import { activityIndicatorOff, activityIndicatorOn } from './components/Activity
 function App() {
   const [boards, setBoards] = useState<null | BoardProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     activityIndicatorOn();

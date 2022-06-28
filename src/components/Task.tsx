@@ -1,6 +1,6 @@
 import { useBoard } from "../context/BoardContext";
 import { Draggable } from "react-beautiful-dnd";
-import { KeyboardEvent, MouseEvent, FocusEvent, MouseEventHandler } from 'react'
+import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
 import { BoardCompleteProps, TaskProps } from "../interfaces";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 import { updateTask, deleteTask } from '../services/KanbanService'
