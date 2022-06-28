@@ -21,8 +21,8 @@ const CompleteBoard = () => {
     event.preventDefault();
     const boardId = event.currentTarget.dataset.board;
 
-    activityIndicatorOn();
     if (window.confirm('Are you sure?')) {
+      activityIndicatorOn();
       deleteBoard(boardId).then(response => {
         activityIndicatorOff();
         navigate('/');
@@ -35,7 +35,7 @@ const CompleteBoard = () => {
       );
     }
 
-  }
+  };
 
   const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget;
