@@ -72,6 +72,20 @@ export async function updateBoardDescription(board: string | undefined, descript
   }
 }
 
+export async function deleteBoard(board: string | undefined) {
+  try {
+    const url = `${backend.url}/api/v1/boards/${board}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return await response.json();
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
 
 export async function createColumn(board: string | undefined, title: string | undefined) {
   try {

@@ -3,7 +3,7 @@ import Column from "../components/Column"
 import { useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
-import { createColumn, moveColumn, moveTask, updateBoardDescription, updateBoardTitle } from "../services/KanbanService";
+import { deleteBoard, createColumn, moveColumn, moveTask, updateBoardDescription, updateBoardTitle } from "../services/KanbanService";
 import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
 
 
@@ -15,6 +15,26 @@ const CompleteBoard = () => {
   let columnsLength = 0;
   if (board) {
     columnsLength = Object.keys(board.columns).length + 1;
+  }
+
+  const removeBoard = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const boardId = event.currentTarget.dataset.board;
+
+    activityIndicatorOn();
+    if (window.confirm('Are you sure?')) {
+      deleteBoard(boardId).then(response => {
+        activityIndicatorOff();
+        navigate('/');
+      }).catch(error => {
+        activityIndicatorOff();
+        console.log(error);
+      }).finally(() => {
+        activityIndicatorOff();
+      }
+      );
+    }
+
   }
 
   const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -113,7 +133,7 @@ const CompleteBoard = () => {
   const hideBoardTitleEdit = () => {
     const h1 = document.getElementById('board-title');
     const titleInput = document.getElementById('board-title-input') as HTMLInputElement;
-   
+
     if (h1) {
       h1.classList.remove('hidden');
       h1.innerHTML = `${h1.dataset.original}`;
@@ -123,7 +143,7 @@ const CompleteBoard = () => {
       titleInput.classList.add('hidden');
       titleInput.value = `${h1?.dataset.original}`;
     }
-    
+
   }
 
   const enableBoardDescriptionEdit = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -168,7 +188,7 @@ const CompleteBoard = () => {
   const hideBoardDescriptionEdit = () => {
     const desc = document.getElementById('board-desc');
     const descTextarea = document.getElementById('board-desc-textarea') as HTMLTextAreaElement;
-   
+
     if (desc) {
       desc.classList.remove('hidden');
       desc.innerHTML = `${desc.dataset.original}`;
@@ -178,10 +198,10 @@ const CompleteBoard = () => {
       descTextarea.classList.add('hidden');
       descTextarea.value = `${desc?.dataset.original}`;
     }
-    
+
   }
 
- 
+
 
   const onDragEnd = (result: DropResult) => {
 
@@ -278,22 +298,22 @@ const CompleteBoard = () => {
 
   return (
     <div className="container mx-auto mt-4">
-      <h1 
+      <h1
         id="board-title"
         className="hover:cursor-pointer border-2 border-white outline-none w-1/2 pl-2 sm:p-0 font-medium text-3xl mb-2"
         data-original={board?.title}
         data-board={board?.id}
         onClick={enableBoardTitleEdit}
       >{board?.title}</h1>
-      <input 
-        id="board-title-input" 
-        className="hidden focus:border-blue-500 border-2 border-white outline-none w-1/2 pl-2 sm:p-0 font-medium text-3xl mb-2" 
+      <input
+        id="board-title-input"
+        className="hidden focus:border-blue-500 border-2 border-white outline-none w-1/2 pl-2 sm:p-0 font-medium text-3xl mb-2"
         data-board={board?.id}
         defaultValue={board?.title}
         onKeyDown={editBoardTitle}
         onBlur={onBlurBoardTitle}
       />
-      <div 
+      <div
         id="board-desc"
         data-original={board?.description}
         data-board={board?.id}
@@ -302,16 +322,16 @@ const CompleteBoard = () => {
       >
         {board?.description}
       </div>
-      <textarea 
-        id="board-desc-textarea" 
-        className="hidden focus:border-blue-500 border-2 border-white resize-none outline-none w-1/2 text-m text-gray-400" 
+      <textarea
+        id="board-desc-textarea"
+        className="hidden focus:border-blue-500 border-2 border-white resize-none outline-none w-1/2 text-m text-gray-400"
         defaultValue={board?.description}
         data-board={board?.id}
         data-original={board?.description}
         onKeyDown={editBoardDescription}
         onBlur={onBlurBoardDescription}
       />
-    
+
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable
           droppableId="columns"
@@ -362,7 +382,8 @@ const CompleteBoard = () => {
 
         </Droppable>
         <div className="text-center my-8">
-          <button className="text-xs text-blue-800 underline" onClick={() => navigate('/')}>Return to boards index.</button>
+          <button className="text-xs text-blue-800 underline" onClick={() => navigate('/')}>Return to boards index</button><br />
+          <button className="mt-8 text-xs text-red-600 underline" data-board={board?.id} onClick={removeBoard}>Delete this board</button>
         </div>
       </DragDropContext>
     </div>
