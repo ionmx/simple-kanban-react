@@ -356,7 +356,7 @@ const CompleteBoard = () => {
             >
               {board?.columns.map((column, index) => {
                 return (
-                  <Column key={column.id} {...column} index={index} board_id={board.id}></Column>
+                  <Column key={`column-${column.id}`} {...column} index={index} board_id={board.id}></Column>
                 );
               })}
               {provided.placeholder}

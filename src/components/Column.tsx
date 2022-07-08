@@ -142,7 +142,7 @@ const Column = (column: ColumnProps) => {
   }
 
   return (
-    <Draggable draggableId={`${column.id}`} index={column.index}>
+    <Draggable draggableId={`column-${column.id}`} index={column.index}>
       {(provided, snapshot) => (
         <div
           key={column.id}
