@@ -114,7 +114,7 @@ return (
           </div>
           <div
             id={`task-text-${task.id}`}
-            className="h-14 p-2"
+            className="min-h-[56px] p-2"
             data-task={task.id}
             onClick={enableEditTask}>
             {task.description}
