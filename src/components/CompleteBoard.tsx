@@ -239,7 +239,7 @@ const CompleteBoard = () => {
     // MOVE COLUMN
     // -----------
     if (result.type === 'column') {
-      const columnId = parseInt(result.draggableId);
+      const columnId = parseInt(result.draggableId.replace('column-', ''));
       const cols = boardCopy.columns;
       const removedColumn = cols.splice(sourceIndex, 1);
       cols.splice(destinationIndex, 0, removedColumn[0]);
