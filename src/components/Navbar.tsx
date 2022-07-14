@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { ActivityIndicator } from './ActivityIndicator';
+import { useNavigate } from 'react-router-dom'
+import { ActivityIndicator } from './ActivityIndicator'
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   return (
     <nav className="bg-white px-2 sm:px-4 py-2.5 drop-shadow">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
@@ -12,7 +12,7 @@ const Navbar = () => {
         <ActivityIndicator/>
       </div>
     </nav>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar

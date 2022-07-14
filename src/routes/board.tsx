@@ -1,12 +1,12 @@
-import CompleteBoard from "../components/CompleteBoard";
-import { BoardProvider } from "../context/BoardContext";
+import CompleteBoard from "../components/CompleteBoard"
+import { BoardProvider } from "../context/BoardContext"
 
 const Board = () => {
   return (
     <BoardProvider>
       <CompleteBoard/>
     </BoardProvider>
-  );
+  )
 }
 
-export default Board;
+export default Board

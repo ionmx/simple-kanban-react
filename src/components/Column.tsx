@@ -1,143 +1,143 @@
-import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces";
+import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces"
 import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
-import Task from "./Task";
-import { createTask, updateColumn, deleteColumn } from '../services/KanbanService';
-import { useBoard } from "../context/BoardContext";
-import { Draggable, Droppable } from "react-beautiful-dnd";
-import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
-import { XIcon } from "@heroicons/react/outline";
+import Task from "./Task"
+import { createTask, updateColumn, deleteColumn } from '../services/KanbanService'
+import { useBoard } from "../context/BoardContext"
+import { Draggable, Droppable } from "react-beautiful-dnd"
+import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator"
+import { XIcon } from "@heroicons/react/outline"
 
 
 const Column = (column: ColumnProps) => {
-  const board = useBoard()?.board;
-  const setBoard = useBoard()?.setBoard;
+  const board = useBoard()?.board
+  const setBoard = useBoard()?.setBoard
 
   const editColumn = (event: KeyboardEvent<HTMLInputElement>) => {
-    const title: HTMLInputElement = event.currentTarget;
-    const boardId = title.dataset.board;
-    const columnId = title.dataset.column;
-    const columnIndex = title.dataset.index as unknown as number;
+    const title: HTMLInputElement = event.currentTarget
+    const boardId = title.dataset.board
+    const columnId = title.dataset.column
+    const columnIndex = title.dataset.index as unknown as number
 
-    const key = event.key || event.keyCode;
+    const key = event.key || event.keyCode
 
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
-      event.preventDefault();
-      activityIndicatorOn();
+      event.preventDefault()
+      activityIndicatorOn()
       updateColumn(boardId, columnId, title.value).then(response => {
-        activityIndicatorOff();
-        const boardCopy = { ...board } as BoardCompleteProps;
-        const newColumn = response.data as ColumnProps;
-        boardCopy.columns[columnIndex].title = newColumn.title;
+        activityIndicatorOff()
+        const boardCopy = { ...board } as BoardCompleteProps
+        const newColumn = response.data as ColumnProps
+        boardCopy.columns[columnIndex].title = newColumn.title
         if (setBoard) {
-          setBoard(boardCopy);
-          hideEditColumn(title);
+          setBoard(boardCopy)
+          hideEditColumn(title)
         }
-        title.value = '';
+        title.value = ''
       })
     }
 
     // Cancel on Escape key pressed
     if (key === 'Escape' || key === 27) {
-      hideEditColumn(title);
+      hideEditColumn(title)
     }
-  };
+  }
 
   const enableEditColumn = (event: MouseEvent<HTMLDivElement>) => {
-    const div: HTMLDivElement = event.currentTarget;
-    const column = div.dataset.column;
-    const input = document.getElementById(`column-input-${column}`);
-    div.classList.add('hidden');
-    input?.classList.remove('hidden');
-    input?.focus();
+    const div: HTMLDivElement = event.currentTarget
+    const column = div.dataset.column
+    const input = document.getElementById(`column-input-${column}`)
+    div.classList.add('hidden')
+    input?.classList.remove('hidden')
+    input?.focus()
   }
 
   const hideEditColumn = (title: HTMLInputElement) => {
-    const column = title.dataset.column;
-    const text = document.getElementById(`column-text-${column}`);
-    title.value = `${title.dataset.original}`;
-    title.classList.add('hidden');
-    text?.classList.remove('hidden');
+    const column = title.dataset.column
+    const text = document.getElementById(`column-text-${column}`)
+    title.value = `${title.dataset.original}`
+    title.classList.add('hidden')
+    text?.classList.remove('hidden')
   }
 
   const onBlurEditColumn = (event: FocusEvent<HTMLInputElement>) => {
-    const title: HTMLInputElement = event.currentTarget;
-    hideEditColumn(title);
+    const title: HTMLInputElement = event.currentTarget
+    hideEditColumn(title)
   }
 
   const showNewTask = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const button: HTMLButtonElement = event.currentTarget;
-    const col = button.dataset.column;
-    const newTaskDesc = document.getElementById("new-task-" + col);
-    const newTaskButton = document.getElementById("button-" + col);
-    newTaskButton?.classList.add("hidden");
-    newTaskDesc?.classList.remove("hidden");
-    newTaskDesc?.focus();
+    const button: HTMLButtonElement = event.currentTarget
+    const col = button.dataset.column
+    const newTaskDesc = document.getElementById("new-task-" + col)
+    const newTaskButton = document.getElementById("button-" + col)
+    newTaskButton?.classList.add("hidden")
+    newTaskDesc?.classList.remove("hidden")
+    newTaskDesc?.focus()
   }
 
   const submitNewTask = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    const desc: HTMLTextAreaElement = event.currentTarget;
-    const boardId = desc.dataset.board;
-    const columnId = desc.dataset.column;
-    const columnIndex = desc.dataset.index as unknown as number;
-    const key = event.key || event.keyCode;
+    const desc: HTMLTextAreaElement = event.currentTarget
+    const boardId = desc.dataset.board
+    const columnId = desc.dataset.column
+    const columnIndex = desc.dataset.index as unknown as number
+    const key = event.key || event.keyCode
 
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
-      event.preventDefault();
-      activityIndicatorOn();
+      event.preventDefault()
+      activityIndicatorOn()
       createTask(boardId, columnId, desc.value).then(response => {
-        activityIndicatorOff();
-        const boardCopy = { ...board } as BoardCompleteProps;
-        const newTask = response.data as TaskProps;
-        boardCopy.columns[columnIndex].tasks.push(newTask);
+        activityIndicatorOff()
+        const boardCopy = { ...board } as BoardCompleteProps
+        const newTask = response.data as TaskProps
+        boardCopy.columns[columnIndex].tasks.push(newTask)
         if (setBoard) {
-          setBoard(boardCopy);
+          setBoard(boardCopy)
         }
-        desc.value = '';
+        desc.value = ''
       })
     }
 
     // Cancel on Escape key pressed
     if (key === 'Escape' || key === 27) {
-      hideTaskForm(desc);
+      hideTaskForm(desc)
     }
   }
 
   const onBlurNewTask = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-    const desc: HTMLTextAreaElement = event.currentTarget;
-    hideTaskForm(desc);
+    const desc: HTMLTextAreaElement = event.currentTarget
+    hideTaskForm(desc)
   }
 
   const hideTaskForm = (desc: HTMLTextAreaElement) => {
-    const columnId = desc.dataset.column;
-    desc.value = '';
-    desc.classList.add("hidden");
-    const newTaskButton = document.getElementById("button-" + columnId);
-    newTaskButton?.classList.remove("hidden");
+    const columnId = desc.dataset.column
+    desc.value = ''
+    desc.classList.add("hidden")
+    const newTaskButton = document.getElementById("button-" + columnId)
+    newTaskButton?.classList.remove("hidden")
   }
 
   const removeColumn = (event: MouseEvent<HTMLDivElement>) => {
-    const div: HTMLDivElement = event.currentTarget;
-    const boardId = div.dataset.board;
-    const columnId = div.dataset.column;
-    const columnIndex = div.dataset.index as unknown as number;
-    const boardCopy = { ...board } as BoardCompleteProps;
+    const div: HTMLDivElement = event.currentTarget
+    const boardId = div.dataset.board
+    const columnId = div.dataset.column
+    const columnIndex = div.dataset.index as unknown as number
+    const boardCopy = { ...board } as BoardCompleteProps
 
     if (boardCopy.columns[columnIndex].tasks.length > 0) {
-      alert('Column is not empty');
-      return;
+      alert('Column is not empty')
+      return
     }
 
     if (window.confirm('Are you sure?')) {
       deleteColumn(boardId, columnId).then(response => {
-        boardCopy.columns.splice(columnIndex, 1);
+        boardCopy.columns.splice(columnIndex, 1)
         if (setBoard) {
-          setBoard(boardCopy);
+          setBoard(boardCopy)
         }
-      });
+      })
     }
   }
 
@@ -222,4 +222,4 @@ const Column = (column: ColumnProps) => {
   )
 }
 
-export default Column;
+export default Column

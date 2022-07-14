@@ -1,25 +1,25 @@
-import { useNavigate } from "react-router-dom";
-import { createBoard } from '../services/KanbanService';
+import { useNavigate } from "react-router-dom"
+import { createBoard } from '../services/KanbanService'
 
 const AddBoardForm = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const showAddBoardForm = () => {
-    const f = document.getElementById("flip-add-form");
-    const i = document.getElementById("new-board-title");
-    f?.classList.add("show-form");
-    i?.focus();
+    const f = document.getElementById("flip-add-form")
+    const i = document.getElementById("new-board-title")
+    f?.classList.add("show-form")
+    i?.focus()
   }
 
   const hideAddBoardForm = () => {
-    const f = document.getElementById("flip-add-form");
-    f?.classList.remove("show-form");
+    const f = document.getElementById("flip-add-form")
+    f?.classList.remove("show-form")
   }
 
   const createNewBoard = () => {
-    const title = document.getElementById('new-board-title') as HTMLInputElement | null;
-    const description = document.getElementById('new-board-description') as HTMLTextAreaElement | null;
+    const title = document.getElementById('new-board-title') as HTMLInputElement | null
+    const description = document.getElementById('new-board-description') as HTMLTextAreaElement | null
     createBoard(title?.value, description?.value).then(response => {
-      navigate(`/board/${response.data.id}`);
+      navigate(`/board/${response.data.id}`)
     })
   }
   return (
@@ -34,7 +34,7 @@ const AddBoardForm = () => {
         <div className="back my-1 max-w-sm rounded border bg-white overflow-hidden shadow-lg">
           <div className="bg-slate-600 text-white font-bold p-2">
             Add Board...
-            <button className="float-right text-l text-white" onClick={() => hideAddBoardForm()}>&#x2715;</button>
+            <button className="float-right text-l text-white" onClick={() => hideAddBoardForm()}>&#x2715</button>
           </div>
           <div className="p-2">
             <input className="border w-full mb-2 p-2 text-xs font-bold" id="new-board-title" placeholder="Title..." />
@@ -44,7 +44,7 @@ const AddBoardForm = () => {
         </div>
       </div>
     </div >
-  );
+  )
 }
 
-export default AddBoardForm;
+export default AddBoardForm

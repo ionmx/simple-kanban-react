@@ -1,86 +1,86 @@
-import { useBoard } from "../context/BoardContext";
-import { Draggable } from "react-beautiful-dnd";
+import { useBoard } from "../context/BoardContext"
+import { Draggable } from "react-beautiful-dnd"
 import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
-import { BoardCompleteProps, TaskProps } from "../interfaces";
-import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator";
+import { BoardCompleteProps, TaskProps } from "../interfaces"
+import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator"
 import { updateTask, deleteTask } from '../services/KanbanService'
 import { XIcon } from '@heroicons/react/outline'
 
 const Task = (task: TaskProps) => {
-  const board = useBoard()?.board;
-  const setBoard = useBoard()?.setBoard;
+  const board = useBoard()?.board
+  const setBoard = useBoard()?.setBoard
 
   const editTask = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    const desc: HTMLTextAreaElement = event.currentTarget;
-    const boardId = desc.dataset.board;
-    const columnId = desc.dataset.column;
-    const taskId = desc.dataset.task;
-    const columnIndex = desc.dataset.column_index as unknown as number;
-    const taskIndex = desc.dataset.index as unknown as number;
+    const desc: HTMLTextAreaElement = event.currentTarget
+    const boardId = desc.dataset.board
+    const columnId = desc.dataset.column
+    const taskId = desc.dataset.task
+    const columnIndex = desc.dataset.column_index as unknown as number
+    const taskIndex = desc.dataset.index as unknown as number
 
-    const key = event.key || event.keyCode;
+    const key = event.key || event.keyCode
 
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
-      event.preventDefault();
-      activityIndicatorOn();
+      event.preventDefault()
+      activityIndicatorOn()
       updateTask(boardId, columnId, taskId, desc.value).then(response => {
-        activityIndicatorOff();
-        const boardCopy = { ...board } as BoardCompleteProps;
-        const newTask = response.data as TaskProps;
-        boardCopy.columns[columnIndex].tasks[taskIndex] = newTask;
+        activityIndicatorOff()
+        const boardCopy = { ...board } as BoardCompleteProps
+        const newTask = response.data as TaskProps
+        boardCopy.columns[columnIndex].tasks[taskIndex] = newTask
         if (setBoard) {
-          setBoard(boardCopy);
-          hideEditTask(desc);
+          setBoard(boardCopy)
+          hideEditTask(desc)
         }
-        desc.value = '';
+        desc.value = ''
       })
     }
 
     // Cancel on Escape key pressed
     if (key === 'Escape' || key === 27) {
-      hideEditTask(desc);
+      hideEditTask(desc)
     }
-  };
+  }
 
   const enableEditTask = (event: MouseEvent<HTMLDivElement>) => {
-    const div: HTMLDivElement = event.currentTarget;
-    const task = div.dataset.task;
-    const textarea = document.getElementById(`task-textarea-${task}`);
-    div.classList.add('hidden');
-    textarea?.classList.remove('hidden');
-    textarea?.focus();
+    const div: HTMLDivElement = event.currentTarget
+    const task = div.dataset.task
+    const textarea = document.getElementById(`task-textarea-${task}`)
+    div.classList.add('hidden')
+    textarea?.classList.remove('hidden')
+    textarea?.focus()
   }
 
   const hideEditTask = (desc: HTMLTextAreaElement) => {
-    const task = desc.dataset.task;
-    const text = document.getElementById(`task-text-${task}`);
-    desc.value = `${desc.dataset.original}`;
-    desc.classList.add('hidden');
-    text?.classList.remove('hidden');
+    const task = desc.dataset.task
+    const text = document.getElementById(`task-text-${task}`)
+    desc.value = `${desc.dataset.original}`
+    desc.classList.add('hidden')
+    text?.classList.remove('hidden')
   }
 
   const onBlurEditTask = (event: FocusEvent<HTMLTextAreaElement>) => {
-    const desc: HTMLTextAreaElement = event.currentTarget;
-    hideEditTask(desc);
+    const desc: HTMLTextAreaElement = event.currentTarget
+    hideEditTask(desc)
   }
 
   const removeTask = (event: MouseEvent<HTMLDivElement>) => {
-    const div: HTMLDivElement = event.currentTarget;
-    const boardId = div.dataset.board;
-    const columnId = div.dataset.column;
-    const taskId = div.dataset.task;
-    const columnIndex = div.dataset.column_index as unknown as number;
-    const taskIndex = div.dataset.index as unknown as number;
+    const div: HTMLDivElement = event.currentTarget
+    const boardId = div.dataset.board
+    const columnId = div.dataset.column
+    const taskId = div.dataset.task
+    const columnIndex = div.dataset.column_index as unknown as number
+    const taskIndex = div.dataset.index as unknown as number
     if (window.confirm('Are you sure?')) {
       deleteTask(boardId, columnId, taskId).then(response => {
-        const boardCopy = { ...board } as BoardCompleteProps;
-        boardCopy.columns[columnIndex].tasks.splice(taskIndex, 1);
+        const boardCopy = { ...board } as BoardCompleteProps
+        boardCopy.columns[columnIndex].tasks.splice(taskIndex, 1)
         if (setBoard) {
-          setBoard(boardCopy);
+          setBoard(boardCopy)
         }
-      });
+      })
     }
   }
 
@@ -138,7 +138,7 @@ return (
     }
     }
   </Draggable>
-);
+)
 }
 
-export default Task;
+export default Task
