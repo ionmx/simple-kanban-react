@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import { BoardProps } from './interfaces';
-import BoardCard from './components/BoardCard';
-import AddBoardForm from './components/AddBoardForm';
-import { getAllBoards } from './services/KanbanService';
-import { activityIndicatorOff, activityIndicatorOn } from './components/ActivityIndicator';
+import React, { useEffect, useState } from 'react'
+import { BoardProps } from './interfaces'
+import BoardCard from './components/BoardCard'
+import AddBoardForm from './components/AddBoardForm'
+import { getAllBoards } from './services/KanbanService'
+import { activityIndicatorOff, activityIndicatorOn } from './components/ActivityIndicator'
 
-function App() {
-  const [boards, setBoards] = useState<null | BoardProps[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+function App () {
+  const [boards, setBoards] = useState<null | BoardProps[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    activityIndicatorOn();
+    activityIndicatorOn()
     getAllBoards().then(response => {
-      setBoards(response.data);
-      setLoading(false);
-      activityIndicatorOff();
-    });
-  }, []);
+      setBoards(response.data)
+      setLoading(false)
+      activityIndicatorOff()
+    })
+  }, [])
 
   if (loading) {
     return <></>
@@ -29,15 +29,13 @@ function App() {
         {boards?.map((board) => {
           return (
             <BoardCard key={board.id} {...board}></BoardCard>
-          );
+          )
         })
         }
         <AddBoardForm></AddBoardForm>
       </div>
     </div>
-  );
+  )
 }
 
-export default App;
-
-
+export default App
