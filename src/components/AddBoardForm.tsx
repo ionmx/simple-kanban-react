@@ -1,18 +1,18 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 import { createBoard } from '../services/KanbanService'
 
 const AddBoardForm = () => {
   const navigate = useNavigate()
   const showAddBoardForm = () => {
-    const f = document.getElementById("flip-add-form")
-    const i = document.getElementById("new-board-title")
-    f?.classList.add("show-form")
+    const f = document.getElementById('flip-add-form')
+    const i = document.getElementById('new-board-title')
+    f?.classList.add('show-form')
     i?.focus()
   }
 
   const hideAddBoardForm = () => {
-    const f = document.getElementById("flip-add-form")
-    f?.classList.remove("show-form")
+    const f = document.getElementById('flip-add-form')
+    f?.classList.remove('show-form')
   }
 
   const createNewBoard = () => {

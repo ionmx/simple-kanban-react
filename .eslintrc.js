@@ -20,5 +20,14 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-  }
+    'react/react-in-jsx-scope': 'off'
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        'no-undef': 'off'
+      }
+    }
+  ]
 }

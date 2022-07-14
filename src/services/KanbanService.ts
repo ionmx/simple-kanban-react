@@ -6,7 +6,7 @@ const development = {
 }
 const backend = process.env.NODE_ENV === 'development' ? development : production
 
-export async function getAllBoards() {
+export async function getAllBoards () {
   try {
     const response = await fetch(`${backend.url}/api/v1/boards`)
     return await response.json()
@@ -16,7 +16,7 @@ export async function getAllBoards() {
   }
 }
 
-export async function getBoard(id: string | undefined) {
+export async function getBoard (id: string | undefined) {
   try {
     const response = await fetch(`${backend.url}/api/v1/boards/${id}`)
     return await response.json()
@@ -25,15 +25,15 @@ export async function getBoard(id: string | undefined) {
   }
 }
 
-export async function createBoard(title: string | undefined, description: string | undefined) {
+export async function createBoard (title: string | undefined, description: string | undefined) {
   try {
     const response = await fetch(`${backend.url}/api/v1/boards/`, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({title: title, description: description})
+      body: JSON.stringify({ title, description })
     })
     return await response.json()
   } catch (error) {
@@ -42,12 +42,12 @@ export async function createBoard(title: string | undefined, description: string
   }
 }
 
-export async function updateBoardTitle(board: string | undefined, title: string | undefined) {
+export async function updateBoardTitle (board: string | undefined, title: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}`
     const response = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify({title: title}),
+      body: JSON.stringify({ title }),
       headers: { 'Content-Type': 'application/json' }
     })
     return await response.json()
@@ -57,12 +57,12 @@ export async function updateBoardTitle(board: string | undefined, title: string 
   }
 }
 
-export async function updateBoardDescription(board: string | undefined, description: string | undefined) {
+export async function updateBoardDescription (board: string | undefined, description: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}`
     const response = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify({description: description}),
+      body: JSON.stringify({ description }),
       headers: { 'Content-Type': 'application/json' }
     })
     return await response.json()
@@ -72,7 +72,7 @@ export async function updateBoardDescription(board: string | undefined, descript
   }
 }
 
-export async function deleteBoard(board: string | undefined) {
+export async function deleteBoard (board: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}`
     const response = await fetch(url, {
@@ -86,17 +86,16 @@ export async function deleteBoard(board: string | undefined) {
   }
 }
 
-
-export async function createColumn(board: string | undefined, title: string | undefined) {
+export async function createColumn (board: string | undefined, title: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/`
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({title: title})
+      body: JSON.stringify({ title })
     })
     return await response.json()
   } catch (error) {
@@ -105,16 +104,16 @@ export async function createColumn(board: string | undefined, title: string | un
   }
 }
 
-export async function createTask(board: string | undefined, column: string | undefined, description: string | undefined) {
+export async function createTask (board: string | undefined, column: string | undefined, description: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/${column}/tasks`
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({description: description})
+      body: JSON.stringify({ description })
     })
     return await response.json()
   } catch (error) {
@@ -123,12 +122,12 @@ export async function createTask(board: string | undefined, column: string | und
   }
 }
 
-export async function updateTask(board: string | undefined, column: string | undefined, task: string | undefined, description: string | undefined) {
+export async function updateTask (board: string | undefined, column: string | undefined, task: string | undefined, description: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/${column}/tasks/${task}`
     const response = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify({description: description}),
+      body: JSON.stringify({ description }),
       headers: { 'Content-Type': 'application/json' }
     })
     return await response.json()
@@ -138,7 +137,7 @@ export async function updateTask(board: string | undefined, column: string | und
   }
 }
 
-export async function deleteTask(board: string | undefined, column: string | undefined, task: string | undefined) {
+export async function deleteTask (board: string | undefined, column: string | undefined, task: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/${column}/tasks/${task}`
     const response = await fetch(url, {
@@ -152,12 +151,12 @@ export async function deleteTask(board: string | undefined, column: string | und
   }
 }
 
-export async function updateColumn(board: string | undefined, column: string | undefined, title: string | undefined) {
+export async function updateColumn (board: string | undefined, column: string | undefined, title: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/${column}`
     const response = await fetch(url, {
       method: 'PATCH',
-      body: JSON.stringify({title: title}),
+      body: JSON.stringify({ title }),
       headers: { 'Content-Type': 'application/json' }
     })
     return await response.json()
@@ -167,7 +166,7 @@ export async function updateColumn(board: string | undefined, column: string | u
   }
 }
 
-export async function deleteColumn(board: string | undefined, column: string | undefined) {
+export async function deleteColumn (board: string | undefined, column: string | undefined) {
   try {
     const url = `${backend.url}/api/v1/boards/${board}/columns/${column}`
     const response = await fetch(url, {
@@ -181,17 +180,16 @@ export async function deleteColumn(board: string | undefined, column: string | u
   }
 }
 
-
-export async function moveTask(board: number, task: number, destinationColumn: number, destinationPosition: number) {
-  try { 
+export async function moveTask (board: number, task: number, destinationColumn: number, destinationPosition: number) {
+  try {
     const url = `${backend.url}/api/v1/boards/${board}/move-task`
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({task: task, destination: destinationColumn, position: destinationPosition})
+      body: JSON.stringify({ task, destination: destinationColumn, position: destinationPosition })
     })
     return await response.json()
   } catch (error) {
@@ -200,16 +198,16 @@ export async function moveTask(board: number, task: number, destinationColumn: n
   }
 }
 
-export async function moveColumn(board: number, column: number, destinationPosition: number) {
-  try { 
+export async function moveColumn (board: number, column: number, destinationPosition: number) {
+  try {
     const url = `${backend.url}/api/v1/boards/${board}/move-column`
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Accept': 'application/json, text/plain, */*',
+        Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({column: column, position: destinationPosition})
+      body: JSON.stringify({ column, position: destinationPosition })
     })
     return await response.json()
   } catch (error) {

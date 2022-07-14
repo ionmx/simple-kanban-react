@@ -1,5 +1,5 @@
 import { BoardProps } from '../interfaces'
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 
 const BoardCard = (board: BoardProps) => {
   const navigate = useNavigate()

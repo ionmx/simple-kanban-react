@@ -1,12 +1,11 @@
-import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces"
+import { BoardCompleteProps, ColumnProps, TaskProps } from '../interfaces'
 import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
-import Task from "./Task"
+import Task from './Task'
 import { createTask, updateColumn, deleteColumn } from '../services/KanbanService'
-import { useBoard } from "../context/BoardContext"
-import { Draggable, Droppable } from "react-beautiful-dnd"
-import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator"
-import { XIcon } from "@heroicons/react/outline"
-
+import { useBoard } from '../context/BoardContext'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
+import { activityIndicatorOff, activityIndicatorOn } from './ActivityIndicator'
+import { XIcon } from '@heroicons/react/outline'
 
 const Column = (column: ColumnProps) => {
   const board = useBoard()?.board
@@ -19,7 +18,6 @@ const Column = (column: ColumnProps) => {
     const columnIndex = title.dataset.index as unknown as number
 
     const key = event.key || event.keyCode
-
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
@@ -66,23 +64,22 @@ const Column = (column: ColumnProps) => {
     hideEditColumn(title)
   }
 
-  const showNewTask = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const showNewTask = (event: MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget
     const col = button.dataset.column
-    const newTaskDesc = document.getElementById("new-task-" + col)
-    const newTaskButton = document.getElementById("button-" + col)
-    newTaskButton?.classList.add("hidden")
-    newTaskDesc?.classList.remove("hidden")
+    const newTaskDesc = document.getElementById('new-task-' + col)
+    const newTaskButton = document.getElementById('button-' + col)
+    newTaskButton?.classList.add('hidden')
+    newTaskDesc?.classList.remove('hidden')
     newTaskDesc?.focus()
   }
 
-  const submitNewTask = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const submitNewTask = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const desc: HTMLTextAreaElement = event.currentTarget
     const boardId = desc.dataset.board
     const columnId = desc.dataset.column
     const columnIndex = desc.dataset.index as unknown as number
     const key = event.key || event.keyCode
-
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
@@ -106,7 +103,7 @@ const Column = (column: ColumnProps) => {
     }
   }
 
-  const onBlurNewTask = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+  const onBlurNewTask = (event: FocusEvent<HTMLTextAreaElement>) => {
     const desc: HTMLTextAreaElement = event.currentTarget
     hideTaskForm(desc)
   }
@@ -114,9 +111,9 @@ const Column = (column: ColumnProps) => {
   const hideTaskForm = (desc: HTMLTextAreaElement) => {
     const columnId = desc.dataset.column
     desc.value = ''
-    desc.classList.add("hidden")
-    const newTaskButton = document.getElementById("button-" + columnId)
-    newTaskButton?.classList.remove("hidden")
+    desc.classList.add('hidden')
+    const newTaskButton = document.getElementById('button-' + columnId)
+    newTaskButton?.classList.remove('hidden')
   }
 
   const removeColumn = (event: MouseEvent<HTMLDivElement>) => {
@@ -148,8 +145,8 @@ const Column = (column: ColumnProps) => {
           key={column.id}
           className={`my-4 max-w-sm min-h-48 p-1 rounded-lg bg-slate-100
                       ${snapshot.isDragging
-              ? "drop-shadow-lg"
-              : ""
+              ? 'drop-shadow-lg'
+              : ''
             }`
           }
           {...provided.draggableProps}

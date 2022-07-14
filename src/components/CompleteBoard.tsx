@@ -1,11 +1,11 @@
-import { useBoard } from "../context/BoardContext"
-import Column from "../components/Column"
+import { useBoard } from '../context/BoardContext'
+import Column from '../components/Column'
 import { useNavigate } from 'react-router-dom'
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd"
-import { BoardCompleteProps, ColumnProps, TaskProps } from "../interfaces"
-import { deleteBoard, createColumn, moveColumn, moveTask, updateBoardDescription, updateBoardTitle } from "../services/KanbanService"
-import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator"
-
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd'
+import { BoardCompleteProps, ColumnProps, TaskProps } from '../interfaces'
+import { deleteBoard, createColumn, moveColumn, moveTask, updateBoardDescription, updateBoardTitle } from '../services/KanbanService'
+import { activityIndicatorOff, activityIndicatorOn } from './ActivityIndicator'
+import { MouseEvent, KeyboardEvent } from 'react'
 
 const CompleteBoard = () => {
   const board = useBoard()?.board
@@ -17,7 +17,7 @@ const CompleteBoard = () => {
     columnsLength = Object.keys(board.columns).length + 1
   }
 
-  const removeBoard = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const removeBoard = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     const boardId = event.currentTarget.dataset.board
 
@@ -34,10 +34,9 @@ const CompleteBoard = () => {
       }
       )
     }
-
   }
 
-  const showColumnForm = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const showColumnForm = (event: MouseEvent<HTMLButtonElement>) => {
     const button: HTMLButtonElement = event.currentTarget
     const placeholder = document.getElementById('newColumnPlaceholder')
     const inputColumn = document.getElementById('newColumnInput')
@@ -59,7 +58,7 @@ const CompleteBoard = () => {
     inputColumn.value = ''
   }
 
-  const submitNewColumn = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const submitNewColumn = (event: KeyboardEvent<HTMLInputElement>) => {
     const key = event.key || event.keyCode
     const title: HTMLInputElement = event.currentTarget
     const boardId = title.dataset.board
@@ -91,16 +90,15 @@ const CompleteBoard = () => {
     hideColumnForm()
   }
 
-  const enableBoardTitleEdit = (event: React.MouseEvent<HTMLHeadElement>) => {
+  const enableBoardTitleEdit = (event: MouseEvent<HTMLHeadElement>) => {
     const h1 = event.currentTarget
     const title = document.getElementById('board-title-input')
     h1.classList.add('hidden')
     title?.classList.remove('hidden')
     title?.focus()
-
   }
 
-  const editBoardTitle = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const editBoardTitle = (event: KeyboardEvent<HTMLInputElement>) => {
     const key = event.key || event.keyCode
     const title: HTMLInputElement = event.currentTarget
     const boardId = title.dataset.board
@@ -143,19 +141,17 @@ const CompleteBoard = () => {
       titleInput.classList.add('hidden')
       titleInput.value = `${h1?.dataset.original}`
     }
-
   }
 
-  const enableBoardDescriptionEdit = (event: React.MouseEvent<HTMLDivElement>) => {
+  const enableBoardDescriptionEdit = (event: MouseEvent<HTMLDivElement>) => {
     const desc = event.currentTarget
     const descTextarea = document.getElementById('board-desc-textarea')
     desc.classList.add('hidden')
     descTextarea?.classList.remove('hidden')
     descTextarea?.focus()
-
   }
 
-  const editBoardDescription = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const editBoardDescription = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     const key = event.key || event.keyCode
     const desc: HTMLTextAreaElement = event.currentTarget
     const boardId = desc.dataset.board
@@ -198,13 +194,9 @@ const CompleteBoard = () => {
       descTextarea.classList.add('hidden')
       descTextarea.value = `${desc?.dataset.original}`
     }
-
   }
 
-
-
   const onDragEnd = (result: DropResult) => {
-
     const removeFromColumn = (column: ColumnProps, index: number) => {
       const result = Array.from(column.tasks)
       const [removed] = result.splice(index, 1)
@@ -235,7 +227,6 @@ const CompleteBoard = () => {
     const destinationId = parseInt(result.destination?.droppableId)
     const destinationIndex = result.destination?.index
 
-
     // MOVE COLUMN
     // -----------
     if (result.type === 'column') {
@@ -260,11 +251,11 @@ const CompleteBoard = () => {
     }
 
     // MOVE TASK
-    //----------
+    // ----------
     const taskId = parseInt(result.draggableId)
     const destinationColumnId = board?.columns[destinationId].id
 
-    // Remove task from source column 
+    // Remove task from source column
     const sourceColumn = boardCopy.columns[sourceId]
     const [removedElement, newSourceColumn] = removeFromColumn(
       sourceColumn,
@@ -293,7 +284,6 @@ const CompleteBoard = () => {
       .then(response => {
         activityIndicatorOff()
       })
-
   }
 
   return (

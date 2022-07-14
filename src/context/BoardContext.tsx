@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, Dispatch, SetStateAction } from "react"
+import React, { createContext, useContext, useEffect, useState, Dispatch, SetStateAction } from 'react'
 import { BoardCompleteProps } from '../interfaces'
 import { getBoard } from '../services/KanbanService'
 import { useParams } from 'react-router-dom'
-import { activityIndicatorOff, activityIndicatorOn } from "../components/ActivityIndicator"
+import { activityIndicatorOff, activityIndicatorOn } from '../components/ActivityIndicator'
 
 interface BoardProviderProps {
   children?: JSX.Element | JSX.Element[]
@@ -15,16 +15,16 @@ interface BoardContextProps {
 
 export const BoardContext = createContext<BoardContextProps | null>(null)
 
-export function useBoard(): BoardContextProps | null {
+export function useBoard (): BoardContextProps | null {
   const context = useContext(BoardContext)
   return context
 }
 
-export function BoardProvider({ children }: BoardProviderProps): JSX.Element {
+export function BoardProvider ({ children }: BoardProviderProps): JSX.Element {
   const [board, setBoard] = useState<BoardCompleteProps | null>(null)
   const [boardLoading, setBoardLoading] = useState<boolean>(true)
   const { id } = useParams()
-  
+
   useEffect(() => {
     activityIndicatorOn()
     getBoard(id).then(response => {
@@ -39,7 +39,7 @@ export function BoardProvider({ children }: BoardProviderProps): JSX.Element {
   }
 
   return (
-    <BoardContext.Provider value={{board, setBoard}}>
+    <BoardContext.Provider value={{ board, setBoard }}>
       {children}
     </BoardContext.Provider>
   )

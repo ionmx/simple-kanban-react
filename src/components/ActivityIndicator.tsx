@@ -10,7 +10,7 @@ export const ActivityIndicator = () => {
 export const activityIndicatorOn = () => {
   const ping = document.getElementById('activity-ping')
   const dot = document.getElementById('activity-dot')
-  
+
   dot?.classList.remove('bg-gray-200')
   dot?.classList.add('bg-green-400')
   ping?.classList.add('animate-ping')

@@ -1,5 +1,5 @@
-import CompleteBoard from "../components/CompleteBoard"
-import { BoardProvider } from "../context/BoardContext"
+import CompleteBoard from '../components/CompleteBoard'
+import { BoardProvider } from '../context/BoardContext'
 
 const Board = () => {
   return (

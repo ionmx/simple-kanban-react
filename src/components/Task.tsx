@@ -1,8 +1,8 @@
-import { useBoard } from "../context/BoardContext"
-import { Draggable } from "react-beautiful-dnd"
+import { useBoard } from '../context/BoardContext'
+import { Draggable } from 'react-beautiful-dnd'
 import { KeyboardEvent, MouseEvent, FocusEvent } from 'react'
-import { BoardCompleteProps, TaskProps } from "../interfaces"
-import { activityIndicatorOff, activityIndicatorOn } from "./ActivityIndicator"
+import { BoardCompleteProps, TaskProps } from '../interfaces'
+import { activityIndicatorOff, activityIndicatorOn } from './ActivityIndicator'
 import { updateTask, deleteTask } from '../services/KanbanService'
 import { XIcon } from '@heroicons/react/outline'
 
@@ -19,7 +19,6 @@ const Task = (task: TaskProps) => {
     const taskIndex = desc.dataset.index as unknown as number
 
     const key = event.key || event.keyCode
-
 
     // Submit on Enter key pressed
     if (key === 'Enter' || key === 13) {
@@ -84,16 +83,15 @@ const Task = (task: TaskProps) => {
     }
   }
 
-
-return (
+  return (
   <Draggable draggableId={`${task.id}`} index={task.index}>
     {(provided, snapshot) => {
       return (
         <div
           className={`group mb-2 p-0 rounded border bg-white drop-shadow-sm 
                      ${snapshot.isDragging
-              ? "drop-shadow-xl"
-              : ""
+              ? 'drop-shadow-xl'
+              : ''
             }`
           }
           ref={provided.innerRef}
@@ -138,7 +136,7 @@ return (
     }
     }
   </Draggable>
-)
+  )
 }
 
 export default Task
