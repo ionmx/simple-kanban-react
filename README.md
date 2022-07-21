@@ -8,6 +8,7 @@ You will need a backend server running on port 4000.
 
  * Elixir/Phoenix: https://github.com/ionmx/simple_kanban_phx
  * Ruby on Rails: https://github.com/ionmx/simple-kanban-ror 
+ * Typescript/Express/Prisma: https://github.com/ionmx/simple-kanban-express-prisma
 
 ## Start
 
